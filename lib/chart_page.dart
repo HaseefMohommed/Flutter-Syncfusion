@@ -32,47 +32,66 @@ class ChartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          SfCartesianChart(
-            title: const ChartTitle(text: 'Flutter chart'),
-            primaryXAxis: DateTimeAxis(
-              majorGridLines: const MajorGridLines(),
-              axisLine: const AxisLine(width: 0),
-              dateFormat: DateFormat.MMMd(),
-              intervalType: DateTimeIntervalType.days,
-              interval: 5,
-            ),
-            primaryYAxis: NumericAxis(
-              minimum: 0,
-              maximum: 10,
-              interval: 2,
-              majorGridLines:
-                  MajorGridLines(width: 0.5, color: Colors.grey[300]),
-              axisLine: const AxisLine(width: 1),
-            ),
-            series: <CartesianSeries>[
-              SplineSeries<ChartData, DateTime>(
-                dataSource: chartData,
-                xValueMapper: (ChartData data, _) => data.date,
-                yValueMapper: (ChartData data, _) => data.firstValue,
-                color: Colors.green,
-              ),
-              SplineSeries<ChartData, DateTime>(
-                dataSource: chartData,
-                xValueMapper: (ChartData data, _) => data.date,
-                yValueMapper: (ChartData data, _) => data.secondValue,
-                color: Colors.blue,
-              ),
-              SplineSeries<ChartData, DateTime>(
-                dataSource: chartData,
-                xValueMapper: (ChartData data, _) => data.date,
-                yValueMapper: (ChartData data, _) => data.thirdValue,
-                color: Colors.red,
-              ),
-            ],
-          ),
-        ],
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              double chartHeight = orientation == Orientation.portrait
+                  ? constraints.maxHeight * 0.4
+                  : constraints.maxHeight;
+              double chartWidth = constraints.maxWidth;
+
+              return Column(
+                children: [
+                  SizedBox(
+                    height: chartHeight,
+                    width: chartWidth,
+                    child: SfCartesianChart(
+                      title: const ChartTitle(text: 'Flutter chart'),
+                      primaryXAxis: DateTimeAxis(
+                        majorGridLines: const MajorGridLines(),
+                        axisLine: const AxisLine(width: 0),
+                        dateFormat: DateFormat.MMMd(),
+                        intervalType: DateTimeIntervalType.days,
+                        interval: 5,
+                      ),
+                      primaryYAxis: NumericAxis(
+                        minimum: 0,
+                        maximum: 10,
+                        interval: 2,
+                        majorGridLines: MajorGridLines(
+                          width: 0.5,
+                          color: Colors.grey[300],
+                        ),
+                        axisLine: const AxisLine(width: 1),
+                      ),
+                      series: <CartesianSeries>[
+                        SplineSeries<ChartData, DateTime>(
+                          dataSource: chartData,
+                          xValueMapper: (ChartData data, _) => data.date,
+                          yValueMapper: (ChartData data, _) => data.firstValue,
+                          color: Colors.green,
+                        ),
+                        SplineSeries<ChartData, DateTime>(
+                          dataSource: chartData,
+                          xValueMapper: (ChartData data, _) => data.date,
+                          yValueMapper: (ChartData data, _) => data.secondValue,
+                          color: Colors.blue,
+                        ),
+                        SplineSeries<ChartData, DateTime>(
+                          dataSource: chartData,
+                          xValueMapper: (ChartData data, _) => data.date,
+                          yValueMapper: (ChartData data, _) => data.thirdValue,
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
     );
   }

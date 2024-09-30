@@ -29,13 +29,10 @@ class DashboardPage extends StatelessWidget {
       ),
       body: Center(
         child: ElevatedButton(
-          style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all<Color>(
-                Colors.blue,
-              ),
-              foregroundColor: WidgetStateProperty.all<Color>(
-                Colors.white,
-              )),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+          ),
           onPressed: () {
             Navigator.push(
               context,
