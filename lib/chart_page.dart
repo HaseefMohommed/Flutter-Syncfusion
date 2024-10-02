@@ -1,42 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_syncfusion/main.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class ChartPage extends StatelessWidget {
-  final List<ChartSeries> chartSeries;
+class ChartPage extends StatefulWidget {
+  final List<List<ChartSeries>> chartSeries;
 
   const ChartPage({
     super.key,
     required this.chartSeries,
   });
 
-  (double, double) getMinMaxValues() {
-    if (chartSeries.isEmpty) {
-      return (0, 0);
-    }
+  @override
+  State<ChartPage> createState() => _ChartPageState();
+}
 
-    double minValue = double.infinity;
-    double maxValue = double.negativeInfinity;
-
-    for (var series in chartSeries) {
-      for (var data in series.data) {
-        minValue = data.value < minValue ? data.value : minValue;
-        maxValue = data.value > maxValue ? data.value : maxValue;
-      }
-    }
-
-    double buffer = (maxValue - minValue) * 0.1;
-    buffer = buffer < 1 ? 1 : buffer;
-
-    double roundedMin = (minValue - buffer).round().toDouble();
-    double roundedMax = (maxValue + buffer).round().toDouble();
-
-    return (roundedMin, roundedMax);
-  }
-
+class _ChartPageState extends State<ChartPage> {
+  ChartDataPoint? selectedPoint;
   @override
   Widget build(BuildContext context) {
-    final (minYValue, maxYValue) = getMinMaxValues();
+    final (minYValue, maxYValue) = _getMinMaxValues(widget.chartSeries);
 
     return Scaffold(
       appBar: AppBar(),
@@ -98,40 +81,111 @@ class ChartPage extends StatelessWidget {
                                 const MajorTickLines(color: Color(0xFF005ca7)),
                           ),
                           series: [
-                            ...chartSeries.map((series) =>
-                                SplineSeries<ChartDataPoint, DateTime>(
-                                  dataSource: series.data,
-                                  xValueMapper: (ChartDataPoint data, _) =>
-                                      data.date,
-                                  yValueMapper: (ChartDataPoint data, _) =>
-                                      data.value,
-                                  name: series.name,
-                                  color: series.color,
-                                  splineType: SplineType.monotonic,
-                                )),
+                            for (List<ChartSeries> series in widget.chartSeries)
+                              for (ChartSeries chartSeries in series)
+                                LineSeries<ChartDataPoint, DateTime>(
+                                  dataSource: chartSeries.data,
+                                  xValueMapper: (data, _) => data.date,
+                                  yValueMapper: (data, _) => data.value,
+                                  name: chartSeries.name,
+                                  color: chartSeries.color,
+                                  dataLabelSettings: const DataLabelSettings(
+                                    isVisible: false,
+                                  ),
+                                )
                           ],
+                          enableAxisAnimation: true,
                           legend: Legend(
+                            orientation: LegendItemOrientation.horizontal,
+                            overflowMode: LegendItemOverflowMode.wrap,
+                            itemPadding: 15.0,
                             isVisible: true,
                             legendItemBuilder:
                                 (legendText, series, point, seriesIndex) {
-                              return const CircleAvatar();
+                              int setIndex = 0;
+                              int seriesInSetIndex = seriesIndex;
+
+                              for (var chartSet in widget.chartSeries) {
+                                if (seriesInSetIndex < chartSet.length) {
+                                  break;
+                                }
+                                seriesInSetIndex -= chartSet.length;
+                                setIndex++;
+                              }
+
+                              Color seriesColor = widget
+                                  .chartSeries[setIndex][seriesInSetIndex]
+                                  .color;
+
+                              return SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: seriesColor,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          point.y?.toStringAsFixed(2) ?? '0',
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
                             },
                           ),
                           trackballBehavior: TrackballBehavior(
-                            enable: true,
-                            activationMode: ActivationMode.longPress,
-                            tooltipSettings: const InteractiveTooltip(
-                              format: 'point.x : point.y',
-                              color: Colors.white,
-                              textStyle: TextStyle(color: Colors.black),
-                            ),
+                              enable: true,
+                              activationMode: ActivationMode.longPress,
+                              tooltipSettings: const InteractiveTooltip(
+                                format: 'point.x : point.y',
+                                color: primaryColor,
+                                textStyle: TextStyle(color: Colors.white),
+                              ),
+                              shouldAlwaysShow: true,
+                              builder: (context, trackballDetails) {
+                                if (trackballDetails.point != null) {
+                                  final dataPoint = trackballDetails.point!;
+                                  selectedPoint = ChartDataPoint(
+                                      dataPoint.x, dataPoint.y!.toDouble());
+                                  // setState(() {
+                                  // });
+                                }
+
+                                return Container();
+                              }),
+                        ),
+                      ),
+                      Container(
+                        color: Colors.white.withOpacity(0.1),
+                        padding: const EdgeInsets.all(8),
+                        child: Text(
+                          selectedPoint != null
+                              ? 'Selected Point: ${selectedPoint!.date} - ${selectedPoint!.value}'
+                              : 'No point selected',
+                          style: const TextStyle(
+                            color: Colors.white,
                           ),
                         ),
                       ),
-                      Padding(
+                      Container(
+                        color: Colors.white.withOpacity(0.1),
                         padding: const EdgeInsets.all(8),
                         child: Text(
-                            'Max vlue: $maxYValue - Min Value :$minYValue'),
+                          'Max vlue: $maxYValue - Min Value :$minYValue',
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -142,6 +196,29 @@ class ChartPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  (double, double) _getMinMaxValues(List<List<ChartSeries>> allChartSeries) {
+    double minValue = double.infinity;
+    double maxValue = double.negativeInfinity;
+
+    // Iterate over all series in all sets
+    for (var chartSet in allChartSeries) {
+      for (var series in chartSet) {
+        for (var data in series.data) {
+          minValue = data.value < minValue ? data.value : minValue;
+          maxValue = data.value > maxValue ? data.value : maxValue;
+        }
+      }
+    }
+
+    double buffer = (maxValue - minValue) * 0.1;
+    buffer = buffer < 1 ? 1 : buffer;
+
+    double roundedMin = (minValue - buffer).round().toDouble();
+    double roundedMax = (maxValue + buffer).round().toDouble();
+
+    return (roundedMin, roundedMax);
   }
 }
 
