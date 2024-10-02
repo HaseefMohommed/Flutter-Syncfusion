@@ -11,10 +11,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Flutter Syncfusion Demo',
       debugShowCheckedModeBanner: false,
-      home: DashboardPage(),
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xFF0E2039),
+      ),
+      home: const DashboardPage(),
     );
   }
 }
@@ -22,33 +25,56 @@ class MyApp extends StatelessWidget {
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
-  static List<ChartData> generateChartData(int count) {
+  static List<ChartSeries> generateChartSeries({int seriesCount = 5}) {
     final random = Random();
-    final List<ChartData> data = [];
-    final startDate = DateTime(2024, 1, 1);
-    final endDate = DateTime(2024, 2, 1);
 
-    for (int i = 0; i < count; i++) {
-      final progress = i / (count - 1);
+    final startDate = DateTime(2024, 1, 1);
+    final endDate = DateTime(2024, 1, 31);
+
+    List<ChartSeries> chartSeries = List.generate(seriesCount, (seriesIndex) {
+      final color = Color.lerp(Colors.blue[900]!, Colors.blue[100]!,
+          seriesIndex / (seriesCount - 1))!;
+
+      return generateSeries(startDate, endDate, 'Series ${seriesIndex + 1}',
+          color, (progress) => generateRandomValue(progress, random));
+    });
+
+    return chartSeries;
+  }
+
+  static ChartSeries generateSeries(DateTime startDate, DateTime endDate,
+      String name, Color color, double Function(double) valueGenerator) {
+    final dataPoints = List.generate(100, (i) {
+      final progress = i / 99;
+
       final currentDate = startDate.add(Duration(
           milliseconds:
               (endDate.difference(startDate).inMilliseconds * progress)
                   .round()));
 
-      final firstValue = (random.nextDouble() * 10).toStringAsFixed(1);
-      final secondValue = (random.nextDouble() * 10).toStringAsFixed(1);
-      final thirdValue = (random.nextDouble() * 10).toStringAsFixed(1);
+      final value = valueGenerator(progress);
 
-      data.add(ChartData(currentDate, double.parse(firstValue),
-          double.parse(secondValue), double.parse(thirdValue)));
-    }
+      return ChartDataPoint(currentDate, value);
+    });
 
-    return data;
+    return ChartSeries(
+      name: name,
+      color: color,
+      data: dataPoints,
+    );
+  }
+
+  static double generateRandomValue(double progress, Random random) {
+    double value = 35 + 15 * sin(progress * 2 * pi * 3);
+
+    value += random.nextDouble() * 4 - 2;
+
+    return value.clamp(15, 55);
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<ChartData> chartData = generateChartData(1000);
+    final List<ChartSeries> chartSeries = generateChartSeries(seriesCount: 10);
 
     return Scaffold(
       appBar: AppBar(
@@ -65,7 +91,7 @@ class DashboardPage extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => ChartPage(
-                  chartData: chartData,
+                  chartSeries: chartSeries,
                 ),
               ),
             );
