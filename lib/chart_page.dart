@@ -3,28 +3,35 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ChartPage extends StatelessWidget {
-  final List<ChartData> chartData;
+  final List<ChartSeries> chartSeries;
 
   const ChartPage({
     super.key,
-    required this.chartData,
+    required this.chartSeries,
   });
 
-  (int, int) getMinMaxValues() {
+  (double, double) getMinMaxValues() {
+    if (chartSeries.isEmpty) {
+      return (0, 0);
+    }
+
     double minValue = double.infinity;
     double maxValue = double.negativeInfinity;
 
-    for (var data in chartData) {
-      minValue = [data.firstValue, data.secondValue, data.thirdValue, minValue]
-          .reduce((a, b) => a < b ? a : b);
-      maxValue = [data.firstValue, data.secondValue, data.thirdValue, maxValue]
-          .reduce((a, b) => a > b ? a : b);
+    for (var series in chartSeries) {
+      for (var data in series.data) {
+        minValue = data.value < minValue ? data.value : minValue;
+        maxValue = data.value > maxValue ? data.value : maxValue;
+      }
     }
 
-    return (
-      minValue.floor(),
-      maxValue.ceil(),
-    );
+    double buffer = (maxValue - minValue) * 0.1;
+    buffer = buffer < 1 ? 1 : buffer;
+
+    double roundedMin = (minValue - buffer).round().toDouble();
+    double roundedMax = (maxValue + buffer).round().toDouble();
+
+    return (roundedMin, roundedMax);
   }
 
   @override
@@ -43,85 +50,91 @@ class ChartPage extends StatelessWidget {
               double chartWidth = constraints.maxWidth;
 
               return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: chartHeight,
-                      width: chartWidth,
-                      child: SfCartesianChart(
-                        title: const ChartTitle(
-                          text: 'Flutter chart',
-                        ),
-                        zoomPanBehavior: ZoomPanBehavior(
-                          enablePinching: true,
-                          enableDoubleTapZooming: true,
-                          enablePanning: true,
-                          zoomMode: ZoomMode.x,
-                        ),
-                        primaryXAxis: DateTimeAxis(
-                          majorGridLines: const MajorGridLines(width: 0),
-                          axisLine: const AxisLine(width: 1),
-                          dateFormat: DateFormat.MMMd(),
-                          intervalType: DateTimeIntervalType.auto,
-                        ),
-                        primaryYAxis: NumericAxis(
-                          minimum: minYValue.floorToDouble(),
-                          maximum: maxYValue.ceilToDouble(),
-                          majorGridLines: MajorGridLines(
-                            width: 0.5,
-                            color: Colors.grey[300],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: chartHeight,
+                        width: chartWidth,
+                        child: SfCartesianChart(
+                          plotAreaBorderWidth: 0,
+                          title: const ChartTitle(
+                            text: 'Flutter Chart',
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
-                          axisLine: const AxisLine(width: 1),
-                        ),
-                        series: <CartesianSeries>[
-                          SplineSeries<ChartData, DateTime>(
-                            dataSource: chartData,
-                            xValueMapper: (ChartData data, _) => data.date,
-                            yValueMapper: (ChartData data, _) =>
-                                data.firstValue,
-                            color: Colors.green,
-                            splineType: SplineType.natural,
+                          zoomPanBehavior: ZoomPanBehavior(
+                            enablePinching: true,
+                            enableDoubleTapZooming: true,
+                            enablePanning: true,
+                            zoomMode: ZoomMode.x,
                           ),
-                          SplineSeries<ChartData, DateTime>(
-                            dataSource: chartData,
-                            xValueMapper: (ChartData data, _) => data.date,
-                            yValueMapper: (ChartData data, _) =>
-                                data.secondValue,
-                            color: Colors.blue,
-                            splineType: SplineType.natural,
+                          primaryXAxis: DateTimeAxis(
+                            majorGridLines: const MajorGridLines(width: 0),
+                            axisLine: const AxisLine(width: 0),
+                            labelStyle: const TextStyle(color: Colors.white),
+                            dateFormat: DateFormat.MMMd(),
+                            intervalType: DateTimeIntervalType.auto,
+                            majorTickLines: const MajorTickLines(
+                              width: 0,
+                            ),
                           ),
-                          SplineSeries<ChartData, DateTime>(
-                            dataSource: chartData,
-                            xValueMapper: (ChartData data, _) => data.date,
-                            yValueMapper: (ChartData data, _) =>
-                                data.thirdValue,
-                            color: Colors.red,
-                            splineType: SplineType.natural,
+                          primaryYAxis: NumericAxis(
+                            minimum: minYValue,
+                            maximum: maxYValue,
+                            labelStyle: const TextStyle(
+                              color: Color(0xFF005ca7),
+                            ),
+                            majorGridLines: const MajorGridLines(width: 0),
+                            axisLine: const AxisLine(
+                              width: 1,
+                              color: Color(0xFF005ca7),
+                            ),
+                            majorTickLines:
+                                const MajorTickLines(color: Color(0xFF005ca7)),
                           ),
-                        ],
-                        trackballBehavior: TrackballBehavior(
-                          enable: true,
-                          activationMode: ActivationMode.longPress,
-                          tooltipSettings: const InteractiveTooltip(
-                            format: 'point.x : point.y',
+                          series: [
+                            ...chartSeries.map((series) =>
+                                SplineSeries<ChartDataPoint, DateTime>(
+                                  dataSource: series.data,
+                                  xValueMapper: (ChartDataPoint data, _) =>
+                                      data.date,
+                                  yValueMapper: (ChartDataPoint data, _) =>
+                                      data.value,
+                                  name: series.name,
+                                  color: series.color,
+                                  splineType: SplineType.monotonic,
+                                )),
+                          ],
+                          legend: Legend(
+                            isVisible: true,
+                            legendItemBuilder:
+                                (legendText, series, point, seriesIndex) {
+                              return const CircleAvatar();
+                            },
+                          ),
+                          trackballBehavior: TrackballBehavior(
+                            enable: true,
+                            activationMode: ActivationMode.longPress,
+                            tooltipSettings: const InteractiveTooltip(
+                              format: 'point.x : point.y',
+                              color: Colors.white,
+                              textStyle: TextStyle(color: Colors.black),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child:
-                          Text('Min Value: $minYValue, Max Value: $maxYValue'),
-                    ),
-                    const SizedBox(
-                      height: 500,
-                      child: Text('sizedbox one'),
-                    ),
-                    const SizedBox(
-                      height: 500,
-                      child: Text('sizedbox two'),
-                    ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Text(
+                            'Max vlue: $maxYValue - Min Value :$minYValue'),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -132,16 +145,21 @@ class ChartPage extends StatelessWidget {
   }
 }
 
-class ChartData {
-  final DateTime date;
-  final double firstValue;
-  final double secondValue;
-  final double thirdValue;
+class ChartSeries {
+  final String name;
+  final List<ChartDataPoint> data;
+  final Color color;
 
-  ChartData(
-    this.date,
-    this.firstValue,
-    this.secondValue,
-    this.thirdValue,
-  );
+  ChartSeries({
+    required this.name,
+    required this.data,
+    required this.color,
+  });
+}
+
+class ChartDataPoint {
+  final DateTime date;
+  final double value;
+
+  ChartDataPoint(this.date, this.value);
 }
