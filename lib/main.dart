@@ -1,9 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_syncfusion/chart_page.dart';
+import 'package:flutter_syncfusion/cubit/chart_cubit.dart';
 
 const Color primaryColor = Color(0xFF051638);
+const Color buttonBorderColor = Color(0xFF338EDC);
+const Color textColor = Color(0xFF338EDC);
+Color buttonBackgroundColor = const Color(0xFF338EDC).withOpacity(0.16);
+
 void main() {
   runApp(const MyApp());
 }
@@ -13,18 +19,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Aroya Room Dashboard (Demo)',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        // scaffoldBackgroundColor: const Color(0xFF0E2039),
-        scaffoldBackgroundColor: primaryColor,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: primaryColor,
-          foregroundColor: Colors.white,
+    return BlocProvider(
+      create: (context) => ChartCubit(),
+      child: MaterialApp(
+        title: 'Aroya Room Dashboard (Demo)',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          // scaffoldBackgroundColor: const Color(0xFF0E2039),
+          scaffoldBackgroundColor: primaryColor,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: primaryColor,
+            foregroundColor: Colors.white,
+          ),
         ),
+        home: const DashboardPage(),
       ),
-      home: const DashboardPage(),
     );
   }
 }

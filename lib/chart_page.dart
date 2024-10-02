@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_syncfusion/chart_page_selected_point_widget.dart';
 import 'package:flutter_syncfusion/main.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class ChartPage extends StatefulWidget {
+import 'cubit/chart_cubit.dart';
+
+class ChartPage extends StatelessWidget {
   final List<List<ChartSeries>> chartSeries;
 
-  const ChartPage({
-    super.key,
-    required this.chartSeries,
-  });
+  const ChartPage({super.key, required this.chartSeries});
 
-  @override
-  State<ChartPage> createState() => _ChartPageState();
-}
-
-class _ChartPageState extends State<ChartPage> {
-  ChartDataPoint? selectedPoint;
   @override
   Widget build(BuildContext context) {
-    final (minYValue, maxYValue) = _getMinMaxValues(widget.chartSeries);
+    final (minYValue, maxYValue) = _getMinMaxValues(chartSeries);
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('Room Dashboard'),
+      ),
       body: OrientationBuilder(
         builder: (context, orientation) {
           return LayoutBuilder(
@@ -39,17 +36,12 @@ class _ChartPageState extends State<ChartPage> {
                   ),
                   child: Column(
                     children: [
+                      const SizedBox(height: 50),
                       SizedBox(
                         height: chartHeight,
                         width: chartWidth,
                         child: SfCartesianChart(
                           plotAreaBorderWidth: 0,
-                          title: const ChartTitle(
-                            text: 'Flutter Chart',
-                            textStyle: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
                           zoomPanBehavior: ZoomPanBehavior(
                             enablePinching: true,
                             enableDoubleTapZooming: true,
@@ -81,7 +73,7 @@ class _ChartPageState extends State<ChartPage> {
                                 const MajorTickLines(color: Color(0xFF005ca7)),
                           ),
                           series: [
-                            for (List<ChartSeries> series in widget.chartSeries)
+                            for (List<ChartSeries> series in chartSeries)
                               for (ChartSeries chartSeries in series)
                                 LineSeries<ChartDataPoint, DateTime>(
                                   dataSource: chartSeries.data,
@@ -105,7 +97,7 @@ class _ChartPageState extends State<ChartPage> {
                               int setIndex = 0;
                               int seriesInSetIndex = seriesIndex;
 
-                              for (var chartSet in widget.chartSeries) {
+                              for (var chartSet in chartSeries) {
                                 if (seriesInSetIndex < chartSet.length) {
                                   break;
                                 }
@@ -113,13 +105,12 @@ class _ChartPageState extends State<ChartPage> {
                                 setIndex++;
                               }
 
-                              Color seriesColor = widget
-                                  .chartSeries[setIndex][seriesInSetIndex]
-                                  .color;
+                              Color seriesColor =
+                                  chartSeries[setIndex][seriesInSetIndex].color;
 
                               return SizedBox(
-                                width: 50,
-                                height: 50,
+                                width: 60,
+                                height: 60,
                                 child: Row(
                                   children: [
                                     Container(
@@ -132,8 +123,10 @@ class _ChartPageState extends State<ChartPage> {
                                         child: Text(
                                           point.y?.toStringAsFixed(2) ?? '0',
                                           style: const TextStyle(
-                                            fontSize: 10,
+                                            fontSize: 14,
                                             color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: -0.9,
                                           ),
                                         ),
                                       ),
@@ -155,35 +148,37 @@ class _ChartPageState extends State<ChartPage> {
                               builder: (context, trackballDetails) {
                                 if (trackballDetails.point != null) {
                                   final dataPoint = trackballDetails.point!;
-                                  selectedPoint = ChartDataPoint(
+                                  final selectedPoint = ChartDataPoint(
                                       dataPoint.x, dataPoint.y!.toDouble());
-                                  // setState(() {
-                                  // });
+
+                                  BlocProvider.of<ChartCubit>(context)
+                                      .updateSelectedPointData(selectedPoint);
                                 }
 
                                 return Container();
                               }),
                         ),
                       ),
-                      Container(
-                        color: Colors.white.withOpacity(0.1),
-                        padding: const EdgeInsets.all(8),
-                        child: Text(
-                          selectedPoint != null
-                              ? 'Selected Point: ${selectedPoint!.date} - ${selectedPoint!.value}'
-                              : 'No point selected',
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const ChartPageSelectedPointWidget(),
+                      const SizedBox(
+                        height: 20,
                       ),
                       Container(
-                        color: Colors.white.withOpacity(0.1),
                         padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: buttonBackgroundColor,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: buttonBorderColor,
+                          ),
+                        ),
                         child: Text(
-                          'Max vlue: $maxYValue - Min Value :$minYValue',
+                          'Max: $maxYValue - Min: $minYValue',
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: textColor,
                           ),
                         ),
                       ),

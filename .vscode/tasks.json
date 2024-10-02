@@ -1,0 +1,33 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Runner Build (Flutter)",
+      "type": "shell",
+      "command": "fvm flutter pub run build_runner build --delete-conflicting-outputs",
+      "problemMatcher": [],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      },
+      "detail": "Build Runner Build for Flutter"
+    },
+    {
+      "label": "i10 Localization Generate (Flutter)",
+      "type": "shell",
+      "command": "fvm flutter gen-l10n",
+      "problemMatcher": [],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      },
+      "detail": "Generate Localization for Flutter"
+    }
+  ]
+}
