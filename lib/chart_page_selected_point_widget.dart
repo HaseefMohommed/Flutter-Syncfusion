@@ -5,7 +5,8 @@ import 'package:flutter_syncfusion/main.dart';
 import 'cubit/chart_cubit.dart';
 
 class ChartPageSelectedPointWidget extends StatelessWidget {
-  const ChartPageSelectedPointWidget({super.key});
+  const ChartPageSelectedPointWidget({super.key, this.isPortrait = true});
+  final bool isPortrait;
 
   @override
   Widget build(BuildContext context) {
@@ -26,57 +27,38 @@ class ChartPageSelectedPointWidget extends StatelessWidget {
             ),
           );
         } else if (state is Loaded) {
-          return Column(
-            children: [
-              Container(
-                width: 90,
-                height: 90,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: buttonBackgroundColor,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: buttonBorderColor,
+          final selectedPointData = state.selectedPointData;
+          return Container(
+            width: isPortrait ? 100 : 150,
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: buttonBackgroundColor,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: buttonBorderColor,
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.bolt, color: textColor),
+                Text(
+                  selectedPointData?.value.toStringAsFixed(2) ?? '0.0',
+                  style: const TextStyle(
+                    color: textColor,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.bolt, color: textColor),
-                      Text(
-                        state.selectedPointData != null
-                            ? state.selectedPointData!.value.toStringAsFixed(2)
-                            : '0.0',
-                        style: const TextStyle(
-                          color: textColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Text(
-                        'dS/m',
-                        style: TextStyle(
-                          color: textColor,
-                          fontSize: 12,
-                        ),
-                      )
-                    ],
+                const Text(
+                  'dS/m',
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: 12,
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              const Text(
-                'ECpw',
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+                )
+              ],
+            ),
           );
         } else if (state is Error) {
           return Container(

@@ -1,43 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_syncfusion/main.dart';
 
-class ChartPageOptionWidget extends StatelessWidget {
+class ChartPageOptionWidget extends StatefulWidget {
   const ChartPageOptionWidget({
     super.key,
   });
 
   @override
+  State<ChartPageOptionWidget> createState() => _ChartPageOptionWidgetState();
+}
+
+class _ChartPageOptionWidgetState extends State<ChartPageOptionWidget> {
+  @override
   Widget build(BuildContext context) {
     return OrientationBuilder(
       builder: (context, orientation) {
-        final isPortrait = orientation == Orientation.portrait;
         return Wrap(
-          direction: isPortrait ? Axis.horizontal : Axis.vertical,
+          // direction: isPortrait ? Axis.horizontal : Axis.vertical,
+          direction: Axis.horizontal,
           alignment: WrapAlignment.start,
           runAlignment: WrapAlignment.start,
           crossAxisAlignment: WrapCrossAlignment.start,
-          spacing: 12,
+          spacing: 100,
           runSpacing: 12,
-          children: const [
+          children: [
             OptionWidget(
+              title: '',
+              icon: Icons.arrow_forward_ios_rounded,
+              onTap: () {},
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const OptionWidget(
               title: 'Prop 1',
               icon: Icons.home,
             ),
-            OptionWidget(
+            const OptionWidget(
               title: 'Prop 2',
               icon: Icons.eco,
               color: Colors.teal,
             ),
-            OptionWidget(
+            const OptionWidget(
               title: '4 Zones',
               icon: Icons.dashboard,
             ),
-            OptionWidget(
-              title: '2 Sensor Value',
+            const OptionWidget(
+              title: 'Sensor 2',
               icon: Icons.show_chart,
             ),
-            OptionWidget(
-              title: '2 Sensor Value',
+            const OptionWidget(
+              title: 'Sensor 3',
               icon: Icons.settings,
               showingTimeCard: true,
             ),
@@ -53,6 +66,8 @@ class OptionWidget extends StatelessWidget {
   final Color color;
   final IconData icon;
   final bool showingTimeCard;
+  final Color backgroundColor;
+  final Function()? onTap;
 
   const OptionWidget({
     super.key,
@@ -60,56 +75,72 @@ class OptionWidget extends StatelessWidget {
     this.color = buttonBorderColor,
     required this.icon,
     this.showingTimeCard = false,
+    this.backgroundColor = primaryColor,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 200),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 130),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: color,
+                ),
+              ),
+              child: Icon(
+                icon,
                 color: color,
               ),
             ),
-            child: Icon(
-              icon,
-              color: color,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Flexible(
-            child: showingTimeCard
-                ? const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TimeCardWidget(
-                        title: '24h',
-                        isSelected: true,
-                      ),
-                      TimeCardWidget(
-                        title: '3d',
-                      ),
-                      TimeCardWidget(
-                        title: '1w',
-                      ),
-                    ],
-                  )
-                : Text(
-                    title,
-                    style: TextStyle(
-                      color: color,
-                      fontSize: 12,
-                    ),
-                  ),
-          ),
-        ],
+            const SizedBox(width: 8),
+            SizedBox(
+              width: 80,
+              child: Text(
+                title,
+                style: TextStyle(
+                    color: color,
+                    fontSize: 12,
+                    overflow: TextOverflow.ellipsis),
+              ),
+            )
+            // Flexible(
+            //   child: showingTimeCard
+            //       ? const Row(
+            //           mainAxisSize: MainAxisSize.min,
+            //           children: [
+            //             TimeCardWidget(
+            //               title: '24h',
+            //               isSelected: true,
+            //             ),
+            //             TimeCardWidget(
+            //               title: '3d',
+            //             ),
+            //             TimeCardWidget(
+            //               title: '1w',
+            //             ),
+            //           ],
+            //         )
+            //       : Text(
+            //           title,
+            //           style: TextStyle(
+            //             color: color,
+            //             fontSize: 12,
+            //           ),
+            //         ),
+            // ),
+          ],
+        ),
       ),
     );
   }

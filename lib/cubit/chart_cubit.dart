@@ -19,7 +19,7 @@ class ChartCubit extends Cubit<ChartState> {
     }
   }
 
-  void updateSelectedPointData(ChartDataPoint? selectedPointData) {
+  void updateSelectedPointData(ChartDataPoint selectedPointData) {
     emit(ChartState.loaded(selectedPointData));
   }
 }
