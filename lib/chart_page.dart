@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_syncfusion/chart_page_option_widget.dart';
 import 'package:flutter_syncfusion/chart_page_selected_point_widget.dart';
 import 'package:flutter_syncfusion/main.dart';
 import 'package:intl/intl.dart';
@@ -91,7 +92,7 @@ class ChartPage extends StatelessWidget {
                             orientation: LegendItemOrientation.horizontal,
                             overflowMode: LegendItemOverflowMode.wrap,
                             itemPadding: 15.0,
-                            isVisible: true,
+                            isVisible: false,
                             legendItemBuilder:
                                 (legendText, series, point, seriesIndex) {
                               int setIndex = 0;
@@ -162,7 +163,18 @@ class ChartPage extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      const ChartPageSelectedPointWidget(),
+                      const ChartPageOptionWidget(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ChartPageSelectedPointWidget(),
+                          ChartPageSelectedPointWidget(),
+                          ChartPageSelectedPointWidget(),
+                        ],
+                      ),
                       const SizedBox(
                         height: 20,
                       ),

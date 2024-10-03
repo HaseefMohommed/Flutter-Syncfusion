@@ -26,23 +26,57 @@ class ChartPageSelectedPointWidget extends StatelessWidget {
             ),
           );
         } else if (state is Loaded) {
-          return Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: buttonBackgroundColor,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: buttonBorderColor,
+          return Column(
+            children: [
+              Container(
+                width: 90,
+                height: 90,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: buttonBackgroundColor,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: buttonBorderColor,
+                  ),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.bolt, color: textColor),
+                      Text(
+                        state.selectedPointData != null
+                            ? state.selectedPointData!.value.toStringAsFixed(2)
+                            : '0.0',
+                        style: const TextStyle(
+                          color: textColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Text(
+                        'dS/m',
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: 12,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
-            ),
-            child: Text(
-              state.selectedPointData != null
-                  ? state.selectedPointData!.value.toStringAsFixed(2)
-                  : 'No point selected',
-              style: const TextStyle(
-                color: textColor,
+              const SizedBox(
+                height: 8,
               ),
-            ),
+              const Text(
+                'ECpw',
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           );
         } else if (state is Error) {
           return Container(
