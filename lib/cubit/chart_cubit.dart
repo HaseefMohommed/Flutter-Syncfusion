@@ -13,13 +13,19 @@ class ChartCubit extends Cubit<ChartState> {
     try {
       emit(const ChartState.loading());
 
-      emit(const ChartState.loaded(null));
+      emit(const ChartState.loaded(
+        averages: null,
+        selectedPoints: null,
+      ));
     } catch (e) {
       emit(const ChartState.error('Failed to load chart data'));
     }
   }
 
-  void updateSelectedPointData(ChartDataPoint selectedPointData) {
-    emit(ChartState.loaded(selectedPointData));
+  void updateAveragePointData(List<double> averages) {
+    emit(ChartState.loaded(
+      averages: averages,
+      selectedPoints: null,
+    ));
   }
 }

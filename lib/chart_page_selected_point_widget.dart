@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_syncfusion/main.dart';
 
 import 'cubit/chart_cubit.dart';
 
 class ChartPageSelectedPointWidget extends StatelessWidget {
-  const ChartPageSelectedPointWidget({super.key, this.isPortrait = true});
+  const ChartPageSelectedPointWidget({
+    super.key,
+    this.isPortrait = true,
+    required this.backgroundColor,
+    required this.baseColor,
+    required this.index,
+  });
   final bool isPortrait;
+  final Color backgroundColor;
+  final Color baseColor;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -27,33 +35,33 @@ class ChartPageSelectedPointWidget extends StatelessWidget {
             ),
           );
         } else if (state is Loaded) {
-          final selectedPointData = state.selectedPointData;
+          final average = state.averages?[index];
           return Container(
             width: isPortrait ? 100 : 150,
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: buttonBackgroundColor,
+              color: backgroundColor,
               shape: BoxShape.circle,
               border: Border.all(
-                color: buttonBorderColor,
+                color: baseColor,
               ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.bolt, color: textColor),
+                Icon(Icons.bolt, color: baseColor),
                 Text(
-                  selectedPointData?.value.toStringAsFixed(2) ?? '0.0',
-                  style: const TextStyle(
-                    color: textColor,
+                  average?.toStringAsFixed(2) ?? '0.0',
+                  style: TextStyle(
+                    color: baseColor,
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Text(
+                Text(
                   'dS/m',
                   style: TextStyle(
-                    color: textColor,
+                    color: baseColor,
                     fontSize: 12,
                   ),
                 )

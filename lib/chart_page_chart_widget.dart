@@ -71,6 +71,8 @@ class ChartPageChartWidget extends StatelessWidget {
         enableAxisAnimation: true,
         trackballBehavior: TrackballBehavior(
           enable: true,
+          lineColor: Colors.white,
+          lineWidth: 2,
           activationMode: ActivationMode.longPress,
           tooltipSettings: const InteractiveTooltip(
             format: 'point.x : point.y',
@@ -80,11 +82,29 @@ class ChartPageChartWidget extends StatelessWidget {
           shouldAlwaysShow: true,
           builder: (context, trackballDetails) {
             if (trackballDetails.point != null) {
-              final dataPoint = trackballDetails.point!;
-              final selectedPoint =
-                  ChartDataPoint(dataPoint.x, dataPoint.y!.toDouble());
+              final pointIndex = trackballDetails.pointIndex ?? 0;
+
+              List<double> averages = [];
+
+              for (var seriesList in chartSeries) {
+                double seriesSum = 0;
+                int seriesCount = 0;
+
+                for (var series in seriesList) {
+                  if (pointIndex < series.data.length) {
+                    seriesSum += series.data[pointIndex].value;
+                    seriesCount++;
+                  }
+                }
+
+                if (seriesCount > 0) {
+                  double average = seriesSum / seriesCount;
+                  averages.add(average);
+                }
+              }
+
               BlocProvider.of<ChartCubit>(context)
-                  .updateSelectedPointData(selectedPoint);
+                  .updateAveragePointData(averages);
             }
             return Container();
           },

@@ -5,14 +5,27 @@ import 'package:flutter_syncfusion/main.dart';
 
 import 'chart_page_option_widget.dart';
 
-class ChartPage extends StatelessWidget {
+class ChartPage extends StatefulWidget {
   final List<List<ChartSeriesData>> chartSeries;
 
   const ChartPage({super.key, required this.chartSeries});
 
   @override
+  State<ChartPage> createState() => _ChartPageState();
+}
+
+class _ChartPageState extends State<ChartPage> {
+  bool _showTitles = true;
+
+  void _toggleTitles() {
+    setState(() {
+      _showTitles = !_showTitles;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final (minYValue, maxYValue) = _getMinMaxValues(chartSeries);
+    final (minYValue, maxYValue) = _getMinMaxValues(widget.chartSeries);
 
     return Scaffold(
         appBar: AppBar(
@@ -32,7 +45,7 @@ class ChartPage extends StatelessWidget {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.5,
                         child: ChartPageChartWidget(
-                          chartSeries: chartSeries,
+                          chartSeries: widget.chartSeries,
                           minYValue: minYValue,
                           maxYValue: maxYValue,
                           chartHeight: double.infinity,
@@ -40,9 +53,11 @@ class ChartPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      // TODO: @Haseef: If have time, see if you can come up with a better layout to display the chart page options widget in protait mode. If not, let's hide it in portrait mode.
-                      const Center(
-                        child: ChartPageOptionWidget(),
+                      Center(
+                        child: ChartPageOptionWidget(
+                          showTitles: _showTitles,
+                          onToggleTitles: _toggleTitles,
+                        ),
                       ),
                     ],
                   );
@@ -54,32 +69,39 @@ class ChartPage extends StatelessWidget {
                           children: [
                             _buildSelectedPointsRow(false),
                             ChartPageChartWidget(
-                              chartSeries: chartSeries,
+                              chartSeries: widget.chartSeries,
                               minYValue: minYValue,
                               maxYValue: maxYValue,
                               chartHeight:
                                   MediaQuery.of(context).size.height * 0.8,
-                              chartWidth:
-                                  MediaQuery.of(context).size.width * 0.60,
+                              chartWidth: MediaQuery.of(context).size.width *
+                                  (_showTitles ? 0.70 : 0.80),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 290,
-                        child: Stack(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 12),
-                              child: VerticalDivider(
-                                color: buttonBorderColor,
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 500),
+                        width: _showTitles ? 142 : 76,
+                        child: SizedBox(
+                          height: 290,
+                          child: Stack(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 12),
+                                child: VerticalDivider(
+                                  color: buttonBorderColor,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 130,
-                              child: ChartPageOptionWidget(),
-                            ),
-                          ],
+                              SizedBox(
+                                width: 130,
+                                child: ChartPageOptionWidget(
+                                  showTitles: _showTitles,
+                                  onToggleTitles: _toggleTitles,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -95,9 +117,24 @@ class ChartPage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        ChartPageSelectedPointWidget(isPortrait: isPortrait),
-        ChartPageSelectedPointWidget(isPortrait: isPortrait),
-        ChartPageSelectedPointWidget(isPortrait: isPortrait),
+        ChartPageSelectedPointWidget(
+          isPortrait: isPortrait,
+          backgroundColor: widget.chartSeries[0].first.color.withOpacity(0.4),
+          baseColor: widget.chartSeries[0].first.color,
+          index: 0,
+        ),
+        ChartPageSelectedPointWidget(
+          isPortrait: isPortrait,
+          backgroundColor: widget.chartSeries[1].first.color.withOpacity(0.4),
+          baseColor: widget.chartSeries[1].first.color,
+          index: 1,
+        ),
+        ChartPageSelectedPointWidget(
+          isPortrait: isPortrait,
+          backgroundColor: widget.chartSeries[2].first.color.withOpacity(0.4),
+          baseColor: widget.chartSeries[2].first.color,
+          index: 2,
+        ),
       ],
     );
   }
