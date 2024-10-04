@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_syncfusion/chart_page_option_widget.dart';
+import 'package:flutter_syncfusion/chart_page_chart_widget.dart';
 import 'package:flutter_syncfusion/chart_page_selected_point_widget.dart';
 import 'package:flutter_syncfusion/main.dart';
-import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
-import 'cubit/chart_cubit.dart';
+import 'chart_page_option_widget.dart';
 
 class ChartPage extends StatelessWidget {
-  final List<List<ChartSeries>> chartSeries;
+  final List<List<ChartSeriesData>> chartSeries;
 
   const ChartPage({super.key, required this.chartSeries});
 
@@ -18,198 +15,98 @@ class ChartPage extends StatelessWidget {
     final (minYValue, maxYValue) = _getMinMaxValues(chartSeries);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Room Dashboard'),
-      ),
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              double chartHeight = orientation == Orientation.portrait
-                  ? constraints.maxHeight * 0.6
-                  : constraints.maxHeight;
-              double chartWidth = constraints.maxWidth;
-
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                  ),
-                  child: Column(
+        appBar: AppBar(
+          title: const Text('Room Dashboard'),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: OrientationBuilder(
+              builder: (context, orientation) {
+                if (MediaQuery.of(context).orientation ==
+                    Orientation.portrait) {
+                  return Column(
                     children: [
-                      const SizedBox(height: 50),
+                      _buildSelectedPointsRow(true),
+                      const SizedBox(height: 5),
                       SizedBox(
-                        height: chartHeight,
-                        width: chartWidth,
-                        child: SfCartesianChart(
-                          plotAreaBorderWidth: 0,
-                          zoomPanBehavior: ZoomPanBehavior(
-                            enablePinching: true,
-                            enableDoubleTapZooming: true,
-                            enablePanning: true,
-                            zoomMode: ZoomMode.x,
-                          ),
-                          primaryXAxis: DateTimeAxis(
-                            majorGridLines: const MajorGridLines(width: 0),
-                            axisLine: const AxisLine(width: 0),
-                            labelStyle: const TextStyle(color: Colors.white),
-                            dateFormat: DateFormat.MMMd(),
-                            intervalType: DateTimeIntervalType.auto,
-                            majorTickLines: const MajorTickLines(
-                              width: 0,
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        child: ChartPageChartWidget(
+                          chartSeries: chartSeries,
+                          minYValue: minYValue,
+                          maxYValue: maxYValue,
+                          chartHeight: double.infinity,
+                          chartWidth: double.infinity,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      // TODO: @Haseef: If have time, see if you can come up with a better layout to display the chart page options widget in protait mode. If not, let's hide it in portrait mode.
+                      const Center(
+                        child: ChartPageOptionWidget(),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            _buildSelectedPointsRow(false),
+                            ChartPageChartWidget(
+                              chartSeries: chartSeries,
+                              minYValue: minYValue,
+                              maxYValue: maxYValue,
+                              chartHeight:
+                                  MediaQuery.of(context).size.height * 0.8,
+                              chartWidth:
+                                  MediaQuery.of(context).size.width * 0.60,
                             ),
-                          ),
-                          primaryYAxis: NumericAxis(
-                            minimum: minYValue,
-                            maximum: maxYValue,
-                            labelStyle: const TextStyle(
-                              color: Color(0xFF005ca7),
-                            ),
-                            majorGridLines: const MajorGridLines(width: 0),
-                            axisLine: const AxisLine(
-                              width: 1,
-                              color: Color(0xFF005ca7),
-                            ),
-                            majorTickLines:
-                                const MajorTickLines(color: Color(0xFF005ca7)),
-                          ),
-                          series: [
-                            for (List<ChartSeries> series in chartSeries)
-                              for (ChartSeries chartSeries in series)
-                                LineSeries<ChartDataPoint, DateTime>(
-                                  dataSource: chartSeries.data,
-                                  xValueMapper: (data, _) => data.date,
-                                  yValueMapper: (data, _) => data.value,
-                                  name: chartSeries.name,
-                                  color: chartSeries.color,
-                                  dataLabelSettings: const DataLabelSettings(
-                                    isVisible: false,
-                                  ),
-                                )
                           ],
-                          enableAxisAnimation: true,
-                          legend: Legend(
-                            orientation: LegendItemOrientation.horizontal,
-                            overflowMode: LegendItemOverflowMode.wrap,
-                            itemPadding: 15.0,
-                            isVisible: false,
-                            legendItemBuilder:
-                                (legendText, series, point, seriesIndex) {
-                              int setIndex = 0;
-                              int seriesInSetIndex = seriesIndex;
-
-                              for (var chartSet in chartSeries) {
-                                if (seriesInSetIndex < chartSet.length) {
-                                  break;
-                                }
-                                seriesInSetIndex -= chartSet.length;
-                                setIndex++;
-                              }
-
-                              Color seriesColor =
-                                  chartSeries[setIndex][seriesInSetIndex].color;
-
-                              return SizedBox(
-                                width: 60,
-                                height: 60,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: seriesColor,
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          point.y?.toStringAsFixed(2) ?? '0',
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: -0.9,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                          trackballBehavior: TrackballBehavior(
-                              enable: true,
-                              activationMode: ActivationMode.longPress,
-                              tooltipSettings: const InteractiveTooltip(
-                                format: 'point.x : point.y',
-                                color: primaryColor,
-                                textStyle: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 290,
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 12),
+                              child: VerticalDivider(
+                                color: buttonBorderColor,
                               ),
-                              shouldAlwaysShow: true,
-                              builder: (context, trackballDetails) {
-                                if (trackballDetails.point != null) {
-                                  final dataPoint = trackballDetails.point!;
-                                  final selectedPoint = ChartDataPoint(
-                                      dataPoint.x, dataPoint.y!.toDouble());
-
-                                  BlocProvider.of<ChartCubit>(context)
-                                      .updateSelectedPointData(selectedPoint);
-                                }
-
-                                return Container();
-                              }),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const ChartPageOptionWidget(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ChartPageSelectedPointWidget(),
-                          ChartPageSelectedPointWidget(),
-                          ChartPageSelectedPointWidget(),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: buttonBackgroundColor,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: buttonBorderColor,
-                          ),
-                        ),
-                        child: Text(
-                          'Max: $maxYValue - Min: $minYValue',
-                          style: const TextStyle(
-                            color: textColor,
-                          ),
+                            ),
+                            SizedBox(
+                              width: 130,
+                              child: ChartPageOptionWidget(),
+                            ),
+                          ],
                         ),
                       ),
                     ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      ),
+                  );
+                }
+              },
+            ),
+          ),
+        ));
+  }
+
+  Widget _buildSelectedPointsRow(bool isPortrait) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        ChartPageSelectedPointWidget(isPortrait: isPortrait),
+        ChartPageSelectedPointWidget(isPortrait: isPortrait),
+        ChartPageSelectedPointWidget(isPortrait: isPortrait),
+      ],
     );
   }
 
-  (double, double) _getMinMaxValues(List<List<ChartSeries>> allChartSeries) {
+  (double, double) _getMinMaxValues(
+      List<List<ChartSeriesData>> allChartSeries) {
     double minValue = double.infinity;
     double maxValue = double.negativeInfinity;
 
-    // Iterate over all series in all sets
     for (var chartSet in allChartSeries) {
       for (var series in chartSet) {
         for (var data in series.data) {
@@ -229,12 +126,12 @@ class ChartPage extends StatelessWidget {
   }
 }
 
-class ChartSeries {
+class ChartSeriesData {
   final String name;
   final List<ChartDataPoint> data;
   final Color color;
 
-  ChartSeries({
+  ChartSeriesData({
     required this.name,
     required this.data,
     required this.color,
