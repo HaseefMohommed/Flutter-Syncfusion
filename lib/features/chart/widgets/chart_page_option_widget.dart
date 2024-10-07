@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_syncfusion/main.dart';
 
 class ChartPageOptionWidget extends StatelessWidget {
+  final bool isPortrait;
   final bool showTitles;
-  final VoidCallback onToggleTitles;
+  final VoidCallback? onToggleTitles;
 
   const ChartPageOptionWidget({
     super.key,
     required this.showTitles,
-    required this.onToggleTitles,
+    this.onToggleTitles,
+    required this.isPortrait,
   });
 
   @override
@@ -21,42 +23,44 @@ class ChartPageOptionWidget extends StatelessWidget {
       spacing: 100,
       runSpacing: 12,
       children: [
-        OptionWidget(
-          title: '',
-          icon: showTitles
-              ? Icons.arrow_forward_ios_rounded
-              : Icons.arrow_downward,
-          onTap: onToggleTitles,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
+        if (!isPortrait) ...[
+          OptionWidget(
+            title: '',
+            icon: showTitles
+                ? Icons.arrow_forward_ios_rounded
+                : Icons.arrow_downward,
+            onTap: onToggleTitles,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+        ],
         OptionWidget(
           title: 'Prop 1',
           icon: Icons.home,
-          showTitle: showTitles,
+          showTitle: isPortrait ? true : showTitles,
         ),
         OptionWidget(
           title: 'Prop 2',
           icon: Icons.eco,
           color: Colors.teal,
-          showTitle: showTitles,
+          showTitle: isPortrait ? true : showTitles,
         ),
         OptionWidget(
           title: '4 Zones',
           icon: Icons.dashboard,
-          showTitle: showTitles,
+          showTitle: isPortrait ? true : showTitles,
         ),
         OptionWidget(
           title: 'Sensor 2',
           icon: Icons.show_chart,
-          showTitle: showTitles,
+          showTitle: isPortrait ? true : showTitles,
         ),
         OptionWidget(
           title: 'Sensor 3',
           icon: Icons.settings,
           showingTimeCard: true,
-          showTitle: showTitles,
+          showTitle: isPortrait ? true : showTitles,
         ),
       ],
     );

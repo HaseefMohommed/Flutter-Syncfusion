@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_syncfusion/chart_page.dart';
+import 'package:flutter_syncfusion/features/chart/cubit/chart_cubit.dart';
+
+import 'package:flutter_syncfusion/features/chart/pages/chart_page.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
-import 'cubit/chart_cubit.dart';
 
 class ChartPageChartWidget extends StatelessWidget {
   const ChartPageChartWidget({
@@ -46,6 +46,15 @@ class ChartPageChartWidget extends StatelessWidget {
           dateFormat: DateFormat.MMMd(),
           intervalType: DateTimeIntervalType.auto,
           majorTickLines: const MajorTickLines(width: 0),
+          interactiveTooltip: InteractiveTooltip(
+            enable: true,
+            color: Colors.transparent,
+            textStyle: TextStyle(
+              color: Colors.white.withOpacity(
+                0.4,
+              ),
+            ),
+          ),
         ),
         primaryYAxis: NumericAxis(
           minimum: minYValue,
@@ -69,20 +78,42 @@ class ChartPageChartWidget extends StatelessWidget {
               ),
         ],
         enableAxisAnimation: true,
+        // crosshairBehavior: CrosshairBehavior(
+        //   enable: true,
+        //   lineWidth: 2,
+        //   lineColor: Colors.white,
+        //   activationMode: ActivationMode.longPress,
+        //   lineType: CrosshairLineType.vertical,
+        // ),
         trackballBehavior: TrackballBehavior(
           enable: true,
           lineColor: Colors.white,
           lineWidth: 2,
+          lineType: TrackballLineType.vertical,
           activationMode: ActivationMode.longPress,
+          // markerSettings: const TrackballMarkerSettings(
+          //   color: Colors.white,
+          //   markerVisibility: TrackballVisibilityMode.visible,
+          //   width: 10,
+          //   height: 10,
+          // ),
           tooltipSettings: const InteractiveTooltip(
-            format: 'point.x : point.y',
+            enable: true,
+            arrowLength: 0,
+            arrowWidth: 0,
             color: Colors.blue,
             textStyle: TextStyle(color: Colors.white),
           ),
-          shouldAlwaysShow: true,
+          // shouldAlwaysShow: true,
+          tooltipDisplayMode: TrackballDisplayMode.nearestPoint,
+          tooltipAlignment: ChartAlignment.far,
           builder: (context, trackballDetails) {
             if (trackballDetails.point != null) {
               final pointIndex = trackballDetails.pointIndex ?? 0;
+              final xValue = trackballDetails.point!.x;
+              final String formattedDate = (xValue is DateTime)
+                  ? DateFormat('M/d h:mm a').format(xValue)
+                  : xValue.toString();
 
               List<double> averages = [];
 
@@ -105,6 +136,24 @@ class ChartPageChartWidget extends StatelessWidget {
 
               BlocProvider.of<ChartCubit>(context)
                   .updateAveragePointData(averages);
+
+              return Positioned(
+                top: 10,
+                left: 10,
+                right: 10,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    formattedDate,
+                    style: const TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                ),
+              );
             }
             return Container();
           },

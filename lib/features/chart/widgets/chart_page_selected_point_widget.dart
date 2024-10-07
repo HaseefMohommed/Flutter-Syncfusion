@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'cubit/chart_cubit.dart';
+import '../cubit/chart_cubit.dart';
 
 class ChartPageSelectedPointWidget extends StatelessWidget {
   const ChartPageSelectedPointWidget({
