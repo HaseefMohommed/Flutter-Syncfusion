@@ -20,7 +20,9 @@ mixin _$ChartState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ChartDataPoint? selectedPointData) loaded,
+    required TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)
+        loaded,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +30,9 @@ mixin _$ChartState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ChartDataPoint? selectedPointData)? loaded,
+    TResult? Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)?
+        loaded,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +40,9 @@ mixin _$ChartState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ChartDataPoint? selectedPointData)? loaded,
+    TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)?
+        loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -132,7 +138,9 @@ class _$InitialImpl implements Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ChartDataPoint? selectedPointData) loaded,
+    required TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)
+        loaded,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -143,7 +151,9 @@ class _$InitialImpl implements Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ChartDataPoint? selectedPointData)? loaded,
+    TResult? Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)?
+        loaded,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -154,7 +164,9 @@ class _$InitialImpl implements Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ChartDataPoint? selectedPointData)? loaded,
+    TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)?
+        loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -249,7 +261,9 @@ class _$LoadingImpl implements Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ChartDataPoint? selectedPointData) loaded,
+    required TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)
+        loaded,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -260,7 +274,9 @@ class _$LoadingImpl implements Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ChartDataPoint? selectedPointData)? loaded,
+    TResult? Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)?
+        loaded,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -271,7 +287,9 @@ class _$LoadingImpl implements Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ChartDataPoint? selectedPointData)? loaded,
+    TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)?
+        loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -329,7 +347,8 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({ChartDataPoint? selectedPointData});
+  $Res call(
+      {List<List<ChartDataPoint?>>? selectedPoints, List<double?>? averages});
 }
 
 /// @nodoc
@@ -345,13 +364,18 @@ class __$$LoadedImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? selectedPointData = freezed,
+    Object? selectedPoints = freezed,
+    Object? averages = freezed,
   }) {
     return _then(_$LoadedImpl(
-      freezed == selectedPointData
-          ? _value.selectedPointData
-          : selectedPointData // ignore: cast_nullable_to_non_nullable
-              as ChartDataPoint?,
+      selectedPoints: freezed == selectedPoints
+          ? _value._selectedPoints
+          : selectedPoints // ignore: cast_nullable_to_non_nullable
+              as List<List<ChartDataPoint?>>?,
+      averages: freezed == averages
+          ? _value._averages
+          : averages // ignore: cast_nullable_to_non_nullable
+              as List<double?>?,
     ));
   }
 }
@@ -359,14 +383,35 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements Loaded {
-  const _$LoadedImpl(this.selectedPointData);
+  const _$LoadedImpl(
+      {final List<List<ChartDataPoint?>>? selectedPoints,
+      final List<double?>? averages})
+      : _selectedPoints = selectedPoints,
+        _averages = averages;
 
+  final List<List<ChartDataPoint?>>? _selectedPoints;
   @override
-  final ChartDataPoint? selectedPointData;
+  List<List<ChartDataPoint?>>? get selectedPoints {
+    final value = _selectedPoints;
+    if (value == null) return null;
+    if (_selectedPoints is EqualUnmodifiableListView) return _selectedPoints;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<double?>? _averages;
+  @override
+  List<double?>? get averages {
+    final value = _averages;
+    if (value == null) return null;
+    if (_averages is EqualUnmodifiableListView) return _averages;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'ChartState.loaded(selectedPointData: $selectedPointData)';
+    return 'ChartState.loaded(selectedPoints: $selectedPoints, averages: $averages)';
   }
 
   @override
@@ -374,12 +419,16 @@ class _$LoadedImpl implements Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoadedImpl &&
-            (identical(other.selectedPointData, selectedPointData) ||
-                other.selectedPointData == selectedPointData));
+            const DeepCollectionEquality()
+                .equals(other._selectedPoints, _selectedPoints) &&
+            const DeepCollectionEquality().equals(other._averages, _averages));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, selectedPointData);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_selectedPoints),
+      const DeepCollectionEquality().hash(_averages));
 
   /// Create a copy of ChartState
   /// with the given fields replaced by the non-null parameter values.
@@ -394,10 +443,12 @@ class _$LoadedImpl implements Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ChartDataPoint? selectedPointData) loaded,
+    required TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)
+        loaded,
     required TResult Function(String message) error,
   }) {
-    return loaded(selectedPointData);
+    return loaded(selectedPoints, averages);
   }
 
   @override
@@ -405,10 +456,12 @@ class _$LoadedImpl implements Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ChartDataPoint? selectedPointData)? loaded,
+    TResult? Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)?
+        loaded,
     TResult? Function(String message)? error,
   }) {
-    return loaded?.call(selectedPointData);
+    return loaded?.call(selectedPoints, averages);
   }
 
   @override
@@ -416,12 +469,14 @@ class _$LoadedImpl implements Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ChartDataPoint? selectedPointData)? loaded,
+    TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)?
+        loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(selectedPointData);
+      return loaded(selectedPoints, averages);
     }
     return orElse();
   }
@@ -465,9 +520,12 @@ class _$LoadedImpl implements Loaded {
 }
 
 abstract class Loaded implements ChartState {
-  const factory Loaded(final ChartDataPoint? selectedPointData) = _$LoadedImpl;
+  const factory Loaded(
+      {final List<List<ChartDataPoint?>>? selectedPoints,
+      final List<double?>? averages}) = _$LoadedImpl;
 
-  ChartDataPoint? get selectedPointData;
+  List<List<ChartDataPoint?>>? get selectedPoints;
+  List<double?>? get averages;
 
   /// Create a copy of ChartState
   /// with the given fields replaced by the non-null parameter values.
@@ -546,7 +604,9 @@ class _$ErrorImpl implements Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ChartDataPoint? selectedPointData) loaded,
+    required TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)
+        loaded,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -557,7 +617,9 @@ class _$ErrorImpl implements Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ChartDataPoint? selectedPointData)? loaded,
+    TResult? Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)?
+        loaded,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -568,7 +630,9 @@ class _$ErrorImpl implements Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ChartDataPoint? selectedPointData)? loaded,
+    TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+            List<double?>? averages)?
+        loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {

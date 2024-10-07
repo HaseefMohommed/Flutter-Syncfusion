@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_syncfusion/chart_page.dart';
-import 'package:flutter_syncfusion/cubit/chart_cubit.dart';
+import 'package:flutter_syncfusion/features/chart/cubit/chart_cubit.dart';
+import 'package:flutter_syncfusion/features/chart/pages/chart_page.dart';
 
 const Color primaryColor = Color(0xFF051638);
 const Color buttonBorderColor = Color(0xFF338EDC);
