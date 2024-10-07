@@ -17,7 +17,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
     with SingleTickerProviderStateMixin {
   bool isExpanded = false;
   static const double minimumSize = 0.18;
-  static const double maximumSize = 0.50;
+  static const double maximumSize = 0.48;
 
   @override
   void initState() {
@@ -72,7 +72,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
                       physics: const ClampingScrollPhysics(),
                       controller: scrollController,
                       children: [
-                        const SizedBox(height: 35),
+                        const SizedBox(height: 40),
                         CustomBottomSheetIconGrid(
                           isExpanded: isExpanded,
                           scrollController: widget.scrollController,
