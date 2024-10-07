@@ -1,18 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_syncfusion/features/chart/widgets/chart_page_chart_widget.dart';
 import 'package:flutter_syncfusion/features/chart/widgets/chart_page_selected_point_widget.dart';
 import 'package:flutter_syncfusion/main.dart';
 
 import '../widgets/chart_page_option_widget.dart';
 
-class ChartPage extends StatelessWidget {
+class ChartPage extends StatefulWidget {
   final List<List<ChartSeriesData>> chartSeries;
 
   const ChartPage({super.key, required this.chartSeries});
 
   @override
+  State<ChartPage> createState() => _ChartPageState();
+}
+
+class _ChartPageState extends State<ChartPage> {
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
+
+  @override
+  dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final (minYValue, maxYValue) = _getMinMaxValues(chartSeries);
+    final (minYValue, maxYValue) = _getMinMaxValues(widget.chartSeries);
 
     return Scaffold(
         appBar: AppBar(
@@ -26,13 +52,13 @@ class ChartPage extends StatelessWidget {
                 if (MediaQuery.of(context).orientation ==
                     Orientation.portrait) {
                   return PortraitLayout(
-                    chartSeries: chartSeries,
+                    chartSeries: widget.chartSeries,
                     minYValue: minYValue,
                     maxYValue: maxYValue,
                   );
                 } else {
                   return LandscapeLayout(
-                    chartSeries: chartSeries,
+                    chartSeries: widget.chartSeries,
                     minYValue: minYValue,
                     maxYValue: maxYValue,
                   );
