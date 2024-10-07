@@ -4,7 +4,7 @@ import 'package:flutter_syncfusion/features/chart/widgets/chart_page_chart_widge
 import 'package:flutter_syncfusion/features/chart/widgets/chart_page_selected_point_widget.dart';
 import 'package:flutter_syncfusion/main.dart';
 
-import '../widgets/chart_page_option_widget.dart';
+import 'widgets/chart_page_option_widget.dart';
 
 class ChartPage extends StatefulWidget {
   final List<List<ChartSeriesData>> chartSeries;

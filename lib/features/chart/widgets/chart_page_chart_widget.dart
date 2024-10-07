@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_syncfusion/features/chart/cubit/chart_cubit.dart';
 
-import 'package:flutter_syncfusion/features/chart/pages/chart_page.dart';
+import 'package:flutter_syncfusion/features/chart/chart_page.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
