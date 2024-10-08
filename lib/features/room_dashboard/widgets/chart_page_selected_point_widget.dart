@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../cubit/chart_cubit.dart';
+import '../cubit/room_dashboard_cubit.dart';
 
 class ChartPageSelectedPointWidget extends StatelessWidget {
   const ChartPageSelectedPointWidget({
@@ -18,8 +18,8 @@ class ChartPageSelectedPointWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChartCubit, ChartState>(
-      bloc: context.read<ChartCubit>()..loadInitialSelectedPointData(),
+    return BlocBuilder<RoomDashboardCubit, RoomDashboardState>(
+      bloc: context.read<RoomDashboardCubit>()..loadInitialSelectedPointData(),
       builder: (context, state) {
         if (state is Initial) {
           return const SizedBox.shrink();

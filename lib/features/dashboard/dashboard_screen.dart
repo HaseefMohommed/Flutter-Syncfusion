@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_syncfusion/main.dart';
 
-import 'widgets/custom_bottom_sheet.dart';
+import 'widgets/dashboard_custom_bottom_sheet.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_syncfusion/features/dashboard/widgets/custom_bottom_sheet_clipper.dart';
-import 'package:flutter_syncfusion/features/dashboard/widgets/custom_bottom_sheet_icon_grid.dart';
+import 'package:flutter_syncfusion/features/dashboard/widgets/dashboard_custom_bottom_sheet_clipper.dart';
+import 'package:flutter_syncfusion/features/dashboard/widgets/dashboard_custom_bottom_sheet_icon_grid.dart';
 import 'package:flutter_syncfusion/main.dart';
 
 class CustomBottomSheet extends StatefulWidget {
@@ -44,11 +44,11 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
       expand: false,
       builder: (BuildContext context, ScrollController scrollController) {
         return ClipPath(
-          clipper: CustomBottomSheetClipper(),
+          clipper: DashboardCustomBottomSheetClipper(),
           child: Stack(
             children: [
               Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: bottomSheetColor,
                   border: Border(
                     top: BorderSide(
@@ -73,7 +73,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
                       controller: scrollController,
                       children: [
                         const SizedBox(height: 40),
-                        CustomBottomSheetIconGrid(
+                        DashboardCustomBottomSheetIconGrid(
                           isExpanded: isExpanded,
                           scrollController: widget.scrollController,
                           minimumSize: minimumSize,
@@ -105,7 +105,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
           turns: !isExpanded ? 0.0 : 0.5,
           duration: const Duration(milliseconds: 120),
           child: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: bottomSheetColor,
               shape: BoxShape.circle,
             ),
