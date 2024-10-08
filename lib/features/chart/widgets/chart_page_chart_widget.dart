@@ -46,15 +46,15 @@ class ChartPageChartWidget extends StatelessWidget {
           dateFormat: DateFormat.MMMd(),
           intervalType: DateTimeIntervalType.auto,
           majorTickLines: const MajorTickLines(width: 0),
-          interactiveTooltip: InteractiveTooltip(
-            enable: true,
-            color: Colors.transparent,
-            textStyle: TextStyle(
-              color: Colors.white.withOpacity(
-                0.4,
-              ),
-            ),
-          ),
+          // interactiveTooltip: InteractiveTooltip(
+          //   enable: true,
+          //   color: Colors.transparent,
+          //   textStyle: TextStyle(
+          //     color: Colors.white.withOpacity(
+          //       0.4,
+          //     ),
+          //   ),
+          // ),
         ),
         primaryYAxis: NumericAxis(
           minimum: minYValue,
@@ -137,21 +137,16 @@ class ChartPageChartWidget extends StatelessWidget {
               BlocProvider.of<ChartCubit>(context)
                   .updateAveragePointData(averages);
 
-              return Positioned(
-                top: 10,
-                left: 10,
-                right: 10,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    formattedDate,
-                    style: const TextStyle(color: Colors.black, fontSize: 12),
-                  ),
+              return Container(
+              
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  formattedDate,
+                  style: const TextStyle(color: Colors.black, fontSize: 12),
                 ),
               );
             }
