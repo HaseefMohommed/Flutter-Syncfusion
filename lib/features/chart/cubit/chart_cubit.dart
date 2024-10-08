@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_syncfusion/features/chart/pages/chart_page.dart';
+import 'package:flutter_syncfusion/features/chart/chart_page.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'chart_cubit.freezed.dart';

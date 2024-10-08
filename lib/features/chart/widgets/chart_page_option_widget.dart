@@ -24,12 +24,15 @@ class ChartPageOptionWidget extends StatelessWidget {
       runSpacing: 12,
       children: [
         if (!isPortrait) ...[
-          OptionWidget(
-            title: '',
-            icon: showTitles
-                ? Icons.arrow_forward_ios_rounded
-                : Icons.arrow_downward,
-            onTap: onToggleTitles,
+          AnimatedRotation(
+            turns: showTitles ? 0.0 : 0.5,
+            duration: const Duration(milliseconds: 200),
+            child: OptionWidget(
+              title: '',
+              showTitle: false,
+              icon: Icons.arrow_forward_ios_rounded,
+              onTap: onToggleTitles,
+            ),
           ),
           const SizedBox(
             height: 10,
