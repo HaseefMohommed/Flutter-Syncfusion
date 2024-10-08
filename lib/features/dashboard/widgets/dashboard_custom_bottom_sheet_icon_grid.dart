@@ -5,8 +5,8 @@ import '../../../main.dart';
 import '../../../utils/helpers/chart_sample_helper.dart';
 import '../../room_dashboard/room_dashboard_page.dart';
 
-class CustomBottomSheetIconGrid extends StatefulWidget {
-  const CustomBottomSheetIconGrid({
+class DashboardCustomBottomSheetIconGrid extends StatefulWidget {
+  const DashboardCustomBottomSheetIconGrid({
     super.key,
     required this.isExpanded,
     required this.scrollController,
@@ -17,11 +17,12 @@ class CustomBottomSheetIconGrid extends StatefulWidget {
   final double minimumSize;
 
   @override
-  State<CustomBottomSheetIconGrid> createState() =>
-      _CustomBottomSheetIconGridState();
+  State<DashboardCustomBottomSheetIconGrid> createState() =>
+      _DashboardCustomBottomSheetIconGridState();
 }
 
-class _CustomBottomSheetIconGridState extends State<CustomBottomSheetIconGrid> {
+class _DashboardCustomBottomSheetIconGridState
+    extends State<DashboardCustomBottomSheetIconGrid> {
   int _tappedIndex = -1;
   @override
   Widget build(BuildContext context) {

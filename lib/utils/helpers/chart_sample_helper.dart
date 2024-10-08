@@ -2,16 +2,17 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../features/chart/chart_page.dart';
+import '../../features/room_dashboard/models/room_dashboard_chart_data_point_model.dart';
+import '../../features/room_dashboard/models/room_dashboard_chart_series_data_model.dart';
 
 class ChartSampleHelper {
-  static List<List<ChartSeriesData>> chartSeries = [
+  static List<List<RoomDashboardChartSeriesDataModel>> chartSeries = [
     _generateChartSeries(seriesCount: 3, setIndex: 1),
     _generateChartSeries(seriesCount: 3, setIndex: 2),
     _generateChartSeries(seriesCount: 3, setIndex: 3),
   ];
 
-  static List<ChartSeriesData> _generateChartSeries({
+  static List<RoomDashboardChartSeriesDataModel> _generateChartSeries({
     int seriesCount = 5,
     required int setIndex,
   }) {
@@ -35,7 +36,7 @@ class ChartSampleHelper {
 
     Color baseColor = baseColors[setIndex - 1];
 
-    List<ChartSeriesData> chartSeries =
+    List<RoomDashboardChartSeriesDataModel> chartSeries =
         List.generate(seriesCount, (seriesIndex) {
       double lightness = 0.4 + (seriesIndex / (seriesCount - 1)) * 0.4;
 
@@ -55,8 +56,12 @@ class ChartSampleHelper {
     return chartSeries;
   }
 
-  static ChartSeriesData _generateSeries(DateTime startDate, DateTime endDate,
-      String name, Color color, double Function(double) valueGenerator) {
+  static RoomDashboardChartSeriesDataModel _generateSeries(
+      DateTime startDate,
+      DateTime endDate,
+      String name,
+      Color color,
+      double Function(double) valueGenerator) {
     final dataPoints = List.generate(100, (i) {
       final progress = i / 99;
 
@@ -67,10 +72,10 @@ class ChartSampleHelper {
 
       final value = valueGenerator(progress);
 
-      return ChartDataPoint(currentDate, value);
+      return RoomDashboardChartDataPointModel(currentDate, value);
     });
 
-    return ChartSeriesData(
+    return RoomDashboardChartSeriesDataModel(
       name: name,
       color: color,
       data: dataPoints,

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_syncfusion/features/chart/cubit/chart_cubit.dart';
-
-import 'package:flutter_syncfusion/features/chart/chart_page.dart';
+import 'package:flutter_syncfusion/features/room_dashboard/cubit/room_dashboard_cubit.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
+import '../models/room_dashboard_chart_data_point_model.dart';
+import '../models/room_dashboard_chart_series_data_model.dart';
 
 class ChartPageChartWidget extends StatelessWidget {
   const ChartPageChartWidget({
@@ -16,7 +17,7 @@ class ChartPageChartWidget extends StatelessWidget {
     required this.chartWidth,
   });
 
-  final List<List<ChartSeriesData>> chartSeries;
+  final List<List<RoomDashboardChartSeriesDataModel>> chartSeries;
   final double minYValue;
   final double maxYValue;
   final double chartHeight;
@@ -66,9 +67,9 @@ class ChartPageChartWidget extends StatelessWidget {
           majorTickLines: const MajorTickLines(color: Color(0xFF005ca7)),
         ),
         series: [
-          for (List<ChartSeriesData> series in chartSeries)
-            for (ChartSeriesData chartSeries in series)
-              LineSeries<ChartDataPoint, DateTime>(
+          for (List<RoomDashboardChartSeriesDataModel> series in chartSeries)
+            for (RoomDashboardChartSeriesDataModel chartSeries in series)
+              LineSeries<RoomDashboardChartDataPointModel, DateTime>(
                 dataSource: chartSeries.data,
                 xValueMapper: (data, _) => data.date,
                 yValueMapper: (data, _) => data.value,
@@ -134,11 +135,10 @@ class ChartPageChartWidget extends StatelessWidget {
                 }
               }
 
-              BlocProvider.of<ChartCubit>(context)
+              BlocProvider.of<RoomDashboardCubit>(context)
                   .updateAveragePointData(averages);
 
               return Container(
-              
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: Colors.white,

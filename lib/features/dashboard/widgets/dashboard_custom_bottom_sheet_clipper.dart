@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CustomBottomSheetClipper extends CustomClipper<Path> {
-  CustomBottomSheetClipper({
+class DashboardCustomBottomSheetClipper extends CustomClipper<Path> {
+  DashboardCustomBottomSheetClipper({
     this.sideCurveStartCord = 50,
     this.topPadding = 30,
     this.centerBumpHeight = -8,

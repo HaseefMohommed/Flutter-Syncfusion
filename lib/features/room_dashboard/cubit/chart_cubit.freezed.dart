@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'chart_cubit.dart';
+part of 'room_dashboard_cubit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -20,7 +20,8 @@ mixin _$ChartState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+    required TResult Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)
         loaded,
     required TResult Function(String message) error,
@@ -30,7 +31,8 @@ mixin _$ChartState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<List<ChartDataPoint?>>? selectedPoints,
+    TResult? Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)?
         loaded,
     TResult? Function(String message)? error,
@@ -40,7 +42,8 @@ mixin _$ChartState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+    TResult Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)?
         loaded,
     TResult Function(String message)? error,
@@ -77,12 +80,12 @@ mixin _$ChartState {
 /// @nodoc
 abstract class $ChartStateCopyWith<$Res> {
   factory $ChartStateCopyWith(
-          ChartState value, $Res Function(ChartState) then) =
-      _$ChartStateCopyWithImpl<$Res, ChartState>;
+          RoomDashboardState value, $Res Function(RoomDashboardState) then) =
+      _$ChartStateCopyWithImpl<$Res, RoomDashboardState>;
 }
 
 /// @nodoc
-class _$ChartStateCopyWithImpl<$Res, $Val extends ChartState>
+class _$ChartStateCopyWithImpl<$Res, $Val extends RoomDashboardState>
     implements $ChartStateCopyWith<$Res> {
   _$ChartStateCopyWithImpl(this._value, this._then);
 
@@ -138,7 +141,8 @@ class _$InitialImpl implements Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+    required TResult Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)
         loaded,
     required TResult Function(String message) error,
@@ -151,7 +155,8 @@ class _$InitialImpl implements Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<List<ChartDataPoint?>>? selectedPoints,
+    TResult? Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)?
         loaded,
     TResult? Function(String message)? error,
@@ -164,7 +169,8 @@ class _$InitialImpl implements Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+    TResult Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)?
         loaded,
     TResult Function(String message)? error,
@@ -214,7 +220,7 @@ class _$InitialImpl implements Initial {
   }
 }
 
-abstract class Initial implements ChartState {
+abstract class Initial implements RoomDashboardState {
   const factory Initial() = _$InitialImpl;
 }
 
@@ -261,7 +267,8 @@ class _$LoadingImpl implements Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+    required TResult Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)
         loaded,
     required TResult Function(String message) error,
@@ -274,7 +281,8 @@ class _$LoadingImpl implements Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<List<ChartDataPoint?>>? selectedPoints,
+    TResult? Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)?
         loaded,
     TResult? Function(String message)? error,
@@ -287,7 +295,8 @@ class _$LoadingImpl implements Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+    TResult Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)?
         loaded,
     TResult Function(String message)? error,
@@ -337,7 +346,7 @@ class _$LoadingImpl implements Loading {
   }
 }
 
-abstract class Loading implements ChartState {
+abstract class Loading implements RoomDashboardState {
   const factory Loading() = _$LoadingImpl;
 }
 
@@ -348,7 +357,8 @@ abstract class _$$LoadedImplCopyWith<$Res> {
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
-      {List<List<ChartDataPoint?>>? selectedPoints, List<double?>? averages});
+      {List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
+      List<double?>? averages});
 }
 
 /// @nodoc
@@ -371,7 +381,7 @@ class __$$LoadedImplCopyWithImpl<$Res>
       selectedPoints: freezed == selectedPoints
           ? _value._selectedPoints
           : selectedPoints // ignore: cast_nullable_to_non_nullable
-              as List<List<ChartDataPoint?>>?,
+              as List<List<RoomDashboardChartDataPointModel?>>?,
       averages: freezed == averages
           ? _value._averages
           : averages // ignore: cast_nullable_to_non_nullable
@@ -384,14 +394,14 @@ class __$$LoadedImplCopyWithImpl<$Res>
 
 class _$LoadedImpl implements Loaded {
   const _$LoadedImpl(
-      {final List<List<ChartDataPoint?>>? selectedPoints,
+      {final List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
       final List<double?>? averages})
       : _selectedPoints = selectedPoints,
         _averages = averages;
 
-  final List<List<ChartDataPoint?>>? _selectedPoints;
+  final List<List<RoomDashboardChartDataPointModel?>>? _selectedPoints;
   @override
-  List<List<ChartDataPoint?>>? get selectedPoints {
+  List<List<RoomDashboardChartDataPointModel?>>? get selectedPoints {
     final value = _selectedPoints;
     if (value == null) return null;
     if (_selectedPoints is EqualUnmodifiableListView) return _selectedPoints;
@@ -443,7 +453,8 @@ class _$LoadedImpl implements Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+    required TResult Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)
         loaded,
     required TResult Function(String message) error,
@@ -456,7 +467,8 @@ class _$LoadedImpl implements Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<List<ChartDataPoint?>>? selectedPoints,
+    TResult? Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)?
         loaded,
     TResult? Function(String message)? error,
@@ -469,7 +481,8 @@ class _$LoadedImpl implements Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+    TResult Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)?
         loaded,
     TResult Function(String message)? error,
@@ -519,12 +532,12 @@ class _$LoadedImpl implements Loaded {
   }
 }
 
-abstract class Loaded implements ChartState {
+abstract class Loaded implements RoomDashboardState {
   const factory Loaded(
-      {final List<List<ChartDataPoint?>>? selectedPoints,
+      {final List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
       final List<double?>? averages}) = _$LoadedImpl;
 
-  List<List<ChartDataPoint?>>? get selectedPoints;
+  List<List<RoomDashboardChartDataPointModel?>>? get selectedPoints;
   List<double?>? get averages;
 
   /// Create a copy of ChartState
@@ -604,7 +617,8 @@ class _$ErrorImpl implements Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+    required TResult Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)
         loaded,
     required TResult Function(String message) error,
@@ -617,7 +631,8 @@ class _$ErrorImpl implements Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<List<ChartDataPoint?>>? selectedPoints,
+    TResult? Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)?
         loaded,
     TResult? Function(String message)? error,
@@ -630,7 +645,8 @@ class _$ErrorImpl implements Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<List<ChartDataPoint?>>? selectedPoints,
+    TResult Function(
+            List<List<RoomDashboardChartDataPointModel?>>? selectedPoints,
             List<double?>? averages)?
         loaded,
     TResult Function(String message)? error,
@@ -680,7 +696,7 @@ class _$ErrorImpl implements Error {
   }
 }
 
-abstract class Error implements ChartState {
+abstract class Error implements RoomDashboardState {
   const factory Error(final String message) = _$ErrorImpl;
 
   String get message;
