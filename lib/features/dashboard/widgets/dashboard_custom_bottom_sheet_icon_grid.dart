@@ -30,8 +30,8 @@ class _DashboardCustomBottomSheetIconGridState
       crossAxisCount: 4,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 00,
-      crossAxisSpacing: 10,
+      mainAxisSpacing: 0,
+      crossAxisSpacing: 5,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       children: List.generate(10, (index) {
         Function onTap = () {};
