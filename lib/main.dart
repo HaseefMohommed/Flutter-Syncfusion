@@ -4,15 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_syncfusion/features/room_dashboard/cubit/room_dashboard_cubit.dart';
 
 import 'features/dashboard/dashboard_screen.dart';
-
-// const Color primaryColor = Color(0xFF051638);
-const Color primaryColor = Color(0xFF1B202D);
-const Color buttonBorderColor = Color(0xFF338EDC);
-const Color iconColor = Color.fromARGB(255, 116, 190, 255);
-const Color textColor = Color(0xFFFFFFFF);
-// const Color textColor = Color(0xFF71ABE1);
-final Color buttonBackgroundColor = const Color(0xFF338EDC).withOpacity(0.16);
-const Color bottomSheetColor = Color(0xFF1D2436);
+import 'theme/theme_colors.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,9 +30,9 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             // scaffoldBackgroundColor: const Color(0xFF0E2039),
-            scaffoldBackgroundColor: primaryColor,
-            appBarTheme: const AppBarTheme(
-              backgroundColor: primaryColor,
+            scaffoldBackgroundColor: ThemeColors.primaryColor,
+            appBarTheme: AppBarTheme(
+              backgroundColor: ThemeColors.primaryColor,
               foregroundColor: Colors.white,
             ),
           ),

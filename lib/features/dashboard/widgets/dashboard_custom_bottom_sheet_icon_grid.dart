@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../main.dart';
+import '../../../theme/theme_colors.dart';
 import '../../../utils/helpers/chart_sample_helper.dart';
 import '../../room_dashboard/room_dashboard_page.dart';
 
@@ -32,19 +32,23 @@ class _DashboardCustomBottomSheetIconGridState
       physics: const NeverScrollableScrollPhysics(),
       mainAxisSpacing: 00,
       crossAxisSpacing: 10,
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      children: List.generate(12, (index) {
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      children: List.generate(10, (index) {
         Function onTap = () {};
+
         final String iconPath;
         final String label;
+        IconData? icon;
         switch (index) {
           case 0:
             iconPath = 'assets/svg/bottom_sheet_icon1.svg';
             label = 'Facility Dashboard';
+            icon = Icons.dashboard;
             break;
 
           case 1:
             iconPath = 'assets/svg/bottom_sheet_icon2.svg';
+            icon = Icons.show_chart;
             label = 'Room Dashboard';
             onTap = () {
               Navigator.push(
@@ -60,12 +64,48 @@ class _DashboardCustomBottomSheetIconGridState
 
           case 2:
             iconPath = 'assets/svg/bottom_sheet_icon3.svg';
+            icon = Icons.event_available;
             label = 'Journal';
             break;
 
           case 3:
             iconPath = 'assets/svg/bottom_sheet_icon4.svg';
             label = 'IPM Events';
+            break;
+
+          case 4:
+            iconPath = 'assets/svg/bottom_sheet_icon4.svg';
+            icon = Icons.alarm;
+            label = 'Notifications';
+            break;
+
+          case 5:
+            iconPath = 'assets/svg/devices_icon.svg';
+            label = 'Devices';
+            break;
+
+          case 6:
+            iconPath = 'assets/svg/bottom_sheet_icon4.svg';
+            icon = Icons.bluetooth;
+            label = 'SOLUS';
+            break;
+
+          case 7:
+            iconPath = 'assets/svg/bottom_sheet_icon4.svg';
+            icon = Icons.help_outline;
+            label = 'Help & Feedback';
+            break;
+
+          case 8:
+            iconPath = 'assets/svg/bottom_sheet_icon4.svg';
+            icon = Icons.info_outline;
+            label = 'About';
+            break;
+
+          case 9:
+            iconPath = 'assets/svg/bottom_sheet_icon4.svg';
+            icon = Icons.power_settings_new;
+            label = 'Logout';
             break;
 
           default:
@@ -107,20 +147,26 @@ class _DashboardCustomBottomSheetIconGridState
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(
-                    iconPath,
-                    width: 30,
-                    height: 30,
-                    colorFilter: const ColorFilter.mode(
-                      iconColor,
-                      BlendMode.srcIn,
-                    ),
-                  ),
+                  icon != null
+                      ? Icon(
+                          icon,
+                          color: ThemeColors.iconColor,
+                          size: 30,
+                        )
+                      : SvgPicture.asset(
+                          iconPath,
+                          width: 30,
+                          height: 30,
+                          colorFilter: ColorFilter.mode(
+                            ThemeColors.iconColor,
+                            BlendMode.srcIn,
+                          ),
+                        ),
                   const SizedBox(height: 5),
                   Text(
-                    label != 'Menu Item' ? label : '$label $index',
-                    style: const TextStyle(
-                      color: textColor,
+                    label,
+                    style: TextStyle(
+                      color: ThemeColors.textColor,
                       fontSize: 12,
                     ),
                     textAlign: TextAlign.center,

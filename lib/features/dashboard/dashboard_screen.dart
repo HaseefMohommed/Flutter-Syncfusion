@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_syncfusion/main.dart';
 
+import '../../theme/theme_colors.dart';
 import 'widgets/dashboard_custom_bottom_sheet.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -12,8 +12,8 @@ class DashboardScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Aroya Sample'.toUpperCase(),
-          style: const TextStyle(
-            color: iconColor,
+          style: TextStyle(
+            color: ThemeColors.iconColor,
             fontWeight: FontWeight.w300,
             fontSize: 16,
             letterSpacing: 1.0,

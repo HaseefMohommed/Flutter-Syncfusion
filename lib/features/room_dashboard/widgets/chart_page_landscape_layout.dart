@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../main.dart';
-import '../room_dashboard_page.dart';
+import '../../../theme/theme_colors.dart';
 import '../models/room_dashboard_chart_series_data_model.dart';
 import 'chart_page_chart_widget.dart';
 import 'chart_page_option_widget.dart';
@@ -63,10 +62,10 @@ class _LandscapeLayoutState extends State<LandscapeLayout> {
                 height: 290,
                 child: Stack(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 12),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12),
                       child: VerticalDivider(
-                        color: buttonBorderColor,
+                        color: ThemeColors.buttonBorderColor,
                       ),
                     ),
                     SizedBox(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_syncfusion/main.dart';
+
+import '../../../theme/theme_colors.dart';
 
 class ChartPageOptionWidget extends StatelessWidget {
   final bool isPortrait;
@@ -15,77 +16,116 @@ class ChartPageOptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      direction: Axis.horizontal,
-      alignment: WrapAlignment.start,
-      runAlignment: WrapAlignment.start,
-      crossAxisAlignment: WrapCrossAlignment.start,
-      spacing: 100,
-      runSpacing: 12,
-      children: [
-        if (!isPortrait) ...[
-          AnimatedRotation(
-            turns: showTitles ? 0.0 : 0.5,
-            duration: const Duration(milliseconds: 200),
-            child: OptionWidget(
-              title: '',
-              showTitle: false,
-              icon: Icons.arrow_forward_ios_rounded,
-              onTap: onToggleTitles,
+    return isPortrait
+        ? GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: 5,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              mainAxisExtent: 40,
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-        ],
-        OptionWidget(
-          title: 'Prop 1',
-          icon: Icons.home,
-          showTitle: isPortrait ? true : showTitles,
-        ),
-        OptionWidget(
-          title: 'Prop 2',
-          icon: Icons.eco,
-          color: Colors.teal,
-          showTitle: isPortrait ? true : showTitles,
-        ),
-        OptionWidget(
-          title: '4 Zones',
-          icon: Icons.dashboard,
-          showTitle: isPortrait ? true : showTitles,
-        ),
-        OptionWidget(
-          title: 'Sensor 2',
-          icon: Icons.show_chart,
-          showTitle: isPortrait ? true : showTitles,
-        ),
-        OptionWidget(
-          title: 'Sensor 3',
-          icon: Icons.settings,
-          showingTimeCard: true,
-          showTitle: isPortrait ? true : showTitles,
-        ),
-      ],
-    );
+            itemBuilder: (context, index) {
+              index = index + 1;
+              if (index == 1) {
+                return OptionWidget(
+                  title: 'Prop 1',
+                  icon: Icons.home,
+                  showTitle: isPortrait ? true : showTitles,
+                );
+              } else if (index == 2) {
+                return OptionWidget(
+                  title: 'Prop 2',
+                  icon: Icons.eco,
+                  showTitle: isPortrait ? true : showTitles,
+                );
+              } else if (index == 3) {
+                return OptionWidget(
+                  title: '4 Zones',
+                  icon: Icons.dashboard,
+                  showTitle: isPortrait ? true : showTitles,
+                );
+              } else {
+                return OptionWidget(
+                  title: 'Sensor 2',
+                  icon: Icons.show_chart,
+                  showTitle: isPortrait ? true : showTitles,
+                );
+              }
+            },
+          )
+        : Wrap(
+            direction: Axis.horizontal,
+            alignment: WrapAlignment.start,
+            runAlignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.start,
+            spacing: 100,
+            runSpacing: 12,
+            children: [
+              // if (!isPortrait) ...[
+              AnimatedRotation(
+                turns: showTitles ? 0.0 : 0.5,
+                duration: const Duration(milliseconds: 200),
+                child: OptionWidget(
+                  title: '',
+                  showTitle: false,
+                  icon: Icons.arrow_forward_ios_rounded,
+                  onTap: onToggleTitles,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              // ],
+              OptionWidget(
+                title: 'Prop 1',
+                icon: Icons.home,
+                showTitle: isPortrait ? true : showTitles,
+              ),
+              OptionWidget(
+                title: 'Prop 2',
+                icon: Icons.eco,
+                showTitle: isPortrait ? true : showTitles,
+              ),
+              OptionWidget(
+                title: '4 Zones',
+                icon: Icons.dashboard,
+                showTitle: isPortrait ? true : showTitles,
+              ),
+              OptionWidget(
+                title: 'Sensor 2',
+                icon: Icons.show_chart,
+                showTitle: isPortrait ? true : showTitles,
+              ),
+              OptionWidget(
+                title: 'Sensor 3',
+                icon: Icons.settings,
+                showingTimeCard: true,
+                showTitle: isPortrait ? true : showTitles,
+              ),
+            ],
+          );
   }
 }
 
 class OptionWidget extends StatelessWidget {
   final String title;
-  final Color color;
+  final Color? color;
   final IconData icon;
   final bool showingTimeCard;
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final VoidCallback? onTap;
   final bool showTitle;
 
   const OptionWidget({
     super.key,
     required this.title,
-    this.color = buttonBorderColor,
+    this.color,
     required this.icon,
     this.showingTimeCard = false,
-    this.backgroundColor = primaryColor,
+    this.backgroundColor,
     this.onTap,
     this.showTitle = true,
   });
@@ -103,11 +143,13 @@ class OptionWidget extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: backgroundColor,
+                color: backgroundColor ?? ThemeColors.primaryColor,
                 shape: BoxShape.circle,
-                border: Border.all(color: color),
+                border: Border.all(
+                  color: color ?? ThemeColors.buttonBorderColor,
+                ),
               ),
-              child: Icon(icon, color: color),
+              child: Icon(icon, color: ThemeColors.iconColor),
             ),
             if (showTitle) ...[
               const SizedBox(width: 8),
@@ -115,7 +157,7 @@ class OptionWidget extends StatelessWidget {
                 child: Text(
                   title,
                   style: TextStyle(
-                    color: color,
+                    color: color ?? ThemeColors.textColor,
                     fontSize: 12,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -145,7 +187,7 @@ class TimeCardWidget extends StatelessWidget {
       margin: const EdgeInsets.all(2),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: isSelected ? textColor : Colors.grey,
+        color: isSelected ? ThemeColors.textColor : Colors.grey,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Text(

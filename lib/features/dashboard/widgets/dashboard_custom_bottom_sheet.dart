@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_syncfusion/features/dashboard/widgets/dashboard_custom_bottom_sheet_clipper.dart';
 import 'package:flutter_syncfusion/features/dashboard/widgets/dashboard_custom_bottom_sheet_icon_grid.dart';
-import 'package:flutter_syncfusion/main.dart';
+
+import '../../../theme/theme_colors.dart';
 
 class CustomBottomSheet extends StatefulWidget {
   final DraggableScrollableController scrollController =
@@ -49,18 +50,18 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: bottomSheetColor,
+                  color: ThemeColors.bottomSheetColor,
                   border: Border(
                     top: BorderSide(
-                      color: bottomSheetColor,
+                      color: ThemeColors.bottomSheetColor,
                       width: 1.0,
                     ),
                     left: BorderSide(
-                      color: bottomSheetColor,
+                      color: ThemeColors.bottomSheetColor,
                       width: 1.0,
                     ),
                     right: BorderSide(
-                      color: bottomSheetColor,
+                      color: ThemeColors.bottomSheetColor,
                       width: 1.0,
                     ),
                     bottom: BorderSide.none,
@@ -93,7 +94,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
 
   Widget _responsiveExpandIndicator() {
     return Positioned(
-      top: 0,
+      top: 5,
       left: MediaQuery.of(context).size.width / 2 - 25,
       child: GestureDetector(
         onTap: () {
@@ -106,13 +107,13 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
           duration: const Duration(milliseconds: 120),
           child: Container(
             decoration: BoxDecoration(
-              color: bottomSheetColor,
+              color: ThemeColors.bottomSheetColor,
               shape: BoxShape.circle,
             ),
-            child: const Icon(
+            child: Icon(
               Icons.keyboard_arrow_up_rounded,
               size: 50,
-              color: iconColor,
+              color: ThemeColors.iconColor,
             ),
           ),
         ),
