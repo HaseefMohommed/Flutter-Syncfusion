@@ -1,40 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_syncfusion/main.dart';
 
+import '../../theme/theme_colors.dart';
 import 'widgets/dashboard_custom_bottom_sheet.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Aroya Sample'.toUpperCase(),
-          style: const TextStyle(
-            color: iconColor,
+          style: TextStyle(
+            color: ThemeColors.iconColor,
             fontWeight: FontWeight.w300,
             fontSize: 16,
             letterSpacing: 1.0,
           ),
         ),
       ),
-      body: Stack(
+      body: DashboardCustomBottomSheet(
         children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                _buildSampleBackground(),
-              ],
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(child: CustomBottomSheet()),
-            ],
-          ),
+          _buildSampleBackground(),
         ],
       ),
     );

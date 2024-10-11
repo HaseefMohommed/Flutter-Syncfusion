@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_syncfusion/features/dashboard/widgets/dashboard_custom_bottom_sheet_clipper.dart';
 import 'package:flutter_syncfusion/features/dashboard/widgets/dashboard_custom_bottom_sheet_icon_grid.dart';
-import 'package:flutter_syncfusion/main.dart';
 
-class CustomBottomSheet extends StatefulWidget {
-  final DraggableScrollableController scrollController =
+import '../../../theme/theme_colors.dart';
+
+class DashboardCustomBottomSheet extends StatefulWidget {
+  final DraggableScrollableController _scrollController =
       DraggableScrollableController();
 
-  CustomBottomSheet({super.key});
+  final List<Widget> children;
+
+  DashboardCustomBottomSheet({
+    super.key,
+    required this.children,
+  });
 
   @override
-  State<CustomBottomSheet> createState() => _CustomBottomSheetState();
+  State<DashboardCustomBottomSheet> createState() =>
+      _DashboardCustomBottomSheetState();
 }
 
-class _CustomBottomSheetState extends State<CustomBottomSheet>
+class _DashboardCustomBottomSheetState extends State<DashboardCustomBottomSheet>
     with SingleTickerProviderStateMixin {
   bool isExpanded = false;
   static const double minimumSize = 0.18;
@@ -22,20 +29,104 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
   @override
   void initState() {
     super.initState();
-    widget.scrollController.addListener(_handleSheetExpansion);
+    widget._scrollController.addListener(_handleSheetExpansion);
   }
 
   @override
   void dispose() {
-    widget.scrollController.removeListener(_handleSheetExpansion);
+    widget._scrollController.removeListener(_handleSheetExpansion);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              ...widget.children,
+              const SizedBox(height: 250),
+            ],
+          ),
+        ),
+        AnimatedCrossFade(
+          crossFadeState: !isExpanded
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          firstChild: Container(),
+          secondChild: GestureDetector(
+            onTap: () {
+              _animateSheetExpansion(
+                null,
+                null,
+                isExpanded,
+                widget._scrollController,
+                () {
+                  setState(() {
+                    isExpanded = !isExpanded;
+                  });
+                },
+              );
+            },
+            child: Container(color: Colors.black.withOpacity(0.5)),
+          ),
+          // animation duration for darkening the background
+          duration: const Duration(milliseconds: 150),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(child: _buildDraggableBottomSheet()),
+          ],
+        ),
+      ],
+    );
+  }
+
+  void _animateSheetExpansion(
+    int? tappedIndex,
+    int? index,
+    bool isExpanded,
+    DraggableScrollableController scrollController,
+    Function onTap,
+  ) async {
+    // animate the tapped icon only if it is clicked
+    if (tappedIndex != null && index != null) {
+      setState(() {
+        tappedIndex = index;
+      });
+      await Future.delayed(const Duration(milliseconds: 150), () {
+        setState(() {
+          tappedIndex = -1;
+        });
+      });
+    }
+
+    if (isExpanded) {
+      await scrollController.animateTo(
+        minimumSize,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+      );
+      await Future.delayed(
+        const Duration(milliseconds: 180),
+      );
+    }
+
+    await Future.delayed(
+      const Duration(milliseconds: 90),
+    );
+
+    if (tappedIndex != null && index != null) {
+      onTap();
+    }
+  }
+
+  Widget _buildDraggableBottomSheet() {
     return DraggableScrollableSheet(
       maxChildSize: maximumSize,
-      controller: widget.scrollController,
+      controller: widget._scrollController,
       initialChildSize: minimumSize,
       minChildSize: minimumSize,
       snapSizes: const [minimumSize, maximumSize],
@@ -49,18 +140,18 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: bottomSheetColor,
+                  color: ThemeColors.bottomSheetColor,
                   border: Border(
                     top: BorderSide(
-                      color: bottomSheetColor,
+                      color: ThemeColors.bottomSheetColor,
                       width: 1.0,
                     ),
                     left: BorderSide(
-                      color: bottomSheetColor,
+                      color: ThemeColors.bottomSheetColor,
                       width: 1.0,
                     ),
                     right: BorderSide(
-                      color: bottomSheetColor,
+                      color: ThemeColors.bottomSheetColor,
                       width: 1.0,
                     ),
                     bottom: BorderSide.none,
@@ -75,7 +166,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
                         const SizedBox(height: 40),
                         DashboardCustomBottomSheetIconGrid(
                           isExpanded: isExpanded,
-                          scrollController: widget.scrollController,
+                          scrollController: widget._scrollController,
                           minimumSize: minimumSize,
                         ),
                       ],
@@ -93,26 +184,26 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
 
   Widget _responsiveExpandIndicator() {
     return Positioned(
-      top: 0,
-      left: MediaQuery.of(context).size.width / 2 - 25,
+      top: 8,
+      left: MediaQuery.of(context).size.width / 2 - 20,
       child: GestureDetector(
         onTap: () {
-          setState(() {
-            isExpanded = !isExpanded;
-          });
+          // setState(() {
+          //   isExpanded = !isExpanded;
+          // });
         },
         child: AnimatedRotation(
           turns: !isExpanded ? 0.0 : 0.5,
-          duration: const Duration(milliseconds: 120),
+          duration: const Duration(milliseconds: 150),
           child: Container(
             decoration: BoxDecoration(
-              color: bottomSheetColor,
+              color: ThemeColors.bottomSheetColor,
               shape: BoxShape.circle,
             ),
             child: const Icon(
               Icons.keyboard_arrow_up_rounded,
-              size: 50,
-              color: iconColor,
+              size: 40,
+              color: Color(0xFF89C9FF),
             ),
           ),
         ),
@@ -121,7 +212,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
   }
 
   void _handleSheetExpansion() {
-    final double currentSize = widget.scrollController.size;
+    final double currentSize = widget._scrollController.size;
 
     if (currentSize >= (maximumSize - maximumSize * 0.25) && !isExpanded) {
       setState(() {
