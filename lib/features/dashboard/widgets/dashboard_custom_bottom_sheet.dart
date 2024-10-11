@@ -46,35 +46,34 @@ class _DashboardCustomBottomSheetState extends State<DashboardCustomBottomSheet>
           child: Column(
             children: [
               ...widget.children,
-              const SizedBox(height: 150),
+              const SizedBox(height: 250),
             ],
           ),
         ),
-        isExpanded
-            ? GestureDetector(
-                onTap: () {
-                  debugPrint('tapped');
-                  _animateSheetExpansion(
-                    null,
-                    null,
-                    isExpanded,
-                    widget._scrollController,
-                    () {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                  );
+        AnimatedCrossFade(
+          crossFadeState: !isExpanded
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          firstChild: Container(),
+          secondChild: GestureDetector(
+            onTap: () {
+              _animateSheetExpansion(
+                null,
+                null,
+                isExpanded,
+                widget._scrollController,
+                () {
+                  setState(() {
+                    isExpanded = !isExpanded;
+                  });
                 },
-                child: AnimatedContainer(
-                  // animation duration for darkening the background
-                  duration: const Duration(milliseconds: 250),
-                  color: isExpanded
-                      ? Colors.black.withOpacity(0.5)
-                      : Colors.black.withOpacity(0.0),
-                ),
-              )
-            : Container(),
+              );
+            },
+            child: Container(color: Colors.black.withOpacity(0.5)),
+          ),
+          // animation duration for darkening the background
+          duration: const Duration(milliseconds: 150),
+        ),
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -189,9 +188,9 @@ class _DashboardCustomBottomSheetState extends State<DashboardCustomBottomSheet>
       left: MediaQuery.of(context).size.width / 2 - 20,
       child: GestureDetector(
         onTap: () {
-          setState(() {
-            isExpanded = !isExpanded;
-          });
+          // setState(() {
+          //   isExpanded = !isExpanded;
+          // });
         },
         child: AnimatedRotation(
           turns: !isExpanded ? 0.0 : 0.5,
